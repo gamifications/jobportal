@@ -2,3 +2,8 @@ django
 django-allauth
 django-crispy-forms
 python-decouple
+
+gunicorn
+whitenoise
+dj-database-url 
+psycopg2
