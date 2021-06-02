@@ -1,3 +1,19 @@
+Need a fullstack developer for a SAAS.
+
+Modules needed
+1) simple landing page
+2) User account (- user account ( email and password, email confirmation, reset password)
+3) Stripe for monthly subsription
+4) Dashboard ( view latest item, add new button)
+    - new form  (This will be saved to the database, these can be edited later if needed..)
+           nested form 1 which accepts a dictionary (key: string -- value: list of strings) --> settings
+           nested form 2 which accepts a few strings and one method to open pdf/docs saving the data to a string
+
+5) results page which will be in a table form (front end)
+- this will included the data from the above form.. especially on the nested form 1.
+---------------------------------------------
+
+
 Dashboard
 - a simple table/rows with the job name, creation date
 - this is also where the user can create new job.
@@ -22,6 +38,7 @@ The tech stack will be Django, django template with html/css/js/jquery.
 Regards.
 Daniel
 
+---------------------------------------
 what i want is
 
 Job form
