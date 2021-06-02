@@ -31,6 +31,20 @@
             </div>
           </div>
           <div class="card mb-3">
+            <div class="card-header">
+              {% url 'job:list' as job_list %}
+              {% url 'job:create' as job_create %}
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                  <a class="nav-link{% if request.path == '/' %} active{% endif %}" href="{{ job_list }}">All Jobs</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link{% if job_create in request.path %} active{% endif %}" href="{{ job_create }}">Create Job</a>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
             <div class="card-body">
               {% for message in messages %}
                 <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">

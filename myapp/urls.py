@@ -1,6 +1,7 @@
 from django.urls import include, path
-from .views import Profile
-
+from . import views
+app_name='job'
 urlpatterns = [
-	path('', Profile.as_view(), name='home'),
+	path('', views.JobListView.as_view(), name='list'),
+	path('new/', views.JobCreateView.as_view(), name='create'),
 ]

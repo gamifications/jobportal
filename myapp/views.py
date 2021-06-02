@@ -1,25 +1,27 @@
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
-from django.views import View
+from django import forms
+from django.views import generic
+from django.urls import reverse_lazy
+from myapp.models import Job
 
-from django.contrib import messages
-from django.contrib.auth import get_user_model
+class JobListView(generic.list.ListView):
+    """Return list of all jobs"""
+    model = Job
 
-@method_decorator([login_required], name='dispatch')
-class Profile(View):
-    # even inactive users can view/edit their profile
-    def get(self, request):
-        return render(request,'myapp/home.html')
+class JobForm(forms.ModelForm):
+    class Meta:
+        model = Job
+        fields = ['position'] #,'keywords'] #'__all__'
 
-    def post(self,request):
-        # user_id=request.POST['user']
-        user = request.user #User.objects.get(id = user_id)
-        
-        user.first_name = request.POST.get('first_name','')
-        user.last_name = request.POST.get('last_name', '')
-        user.save()
-        messages.success(request, 'User details of {} saved with success!'.format(user.username))
-        return redirect('home')
-
-
+class JobCreateView(generic.edit.CreateView):
+    form_class = JobForm
+    model = Job
+    success_url = reverse_lazy('job:list')
+    def form_valid(self, form):
+        print(form.instance)
+        print(self.request.POST, 'post data')
+        import json
+        print(self.request.body)
+        print(self.request.POST.getlist('keywords'), 'post data')
+        obj = form.save(commit=False)
+        obj.created_by = self.request.user
+        return super().form_valid(form)

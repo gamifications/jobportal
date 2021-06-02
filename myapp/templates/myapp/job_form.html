@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+    {% block css %}
+    <style type="text/css">
+    .glyphicon-minus-sign:before {
+	    content: "\2212";
+	}
+	.glyphicon-plus-sign:before {
+	    content: "\002b";
+	}
+	.btn-default {
+	    color: #333;
+	    background-color: #fff;
+	    border-color: #ccc;
+	}
+	</style>
+    {% endblock %}
+
+{% block content %}
+<form method="post" novalidate>
+	{% csrf_token %}
+	{{ form|crispy }}
+	<div id="keywords"></div>
+</form>    {% endblock %}
+{% block js %}
+<script src="https://jsonform.github.io/jsonform/deps/underscore.js"></script>
+<script src="https://jsonform.github.io/jsonform/lib/jsonform.js"></script>
+
+ <script type="text/javascript">
+ 	$('#keywords').jsonForm({
+  "schema": {
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Keyword",
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "title": "Keyword Name"
+          },
+          "string": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "title": "String Name"
+            }
+          }
+        }
+      }
+    }
+  }
+});
+    </script>
+{% endblock %}
