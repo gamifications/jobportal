@@ -3,6 +3,7 @@ Need a fullstack developer for a SAAS.
 Modules needed
 1) simple landing page
 2) User account (- user account ( email and password, email confirmation, reset password)
+
 3) Stripe for monthly subsription
 4) Dashboard ( view latest item, add new button)
     - new form  (This will be saved to the database, these can be edited later if needed..)
