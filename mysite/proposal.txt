@@ -1,0 +1,53 @@
+Dashboard
+- a simple table/rows with the job name, creation date
+- this is also where the user can create new job.
+
+Docs/PDF
+- user can upload the resume in textfield, docs or PDF. Logic can be applied at server or client side to open and save to database. However, if there is an error in opening, warning message should be prompted to the user.
+
+* get data as string from pdf/docs
+
+my concern is more to the job form.. if your live example can demonstrate this, i'm good to offer this project to you.
+Rest of the module is not difficult to implement.
+
+Hi Suhail
+How would you approach the below?
+
+New form (This will be saved to the database, these can be edited later if needed..)
+- nested form 1 which accepts a dictionary (key: string -- value: list of strings) --> settings
+- nested form 2 which accepts a few strings and one method to open pdf/docs saving the data to a string
+
+The tech stack will be Django, django template with html/css/js/jquery.
+
+Regards.
+Daniel
+
+what i want is
+
+Job form
+- job position
+- job application date
+- nested form 1 which is keywords,
+example..
+keyword 1 - string 1, string 2, string 3
+keyword 2 - string 4, string 6, string 7, string 5,
+keyword 3 - string 5,
+
+- nested form 2 which is for the applicants..
+name
+resume (text fields) or docs,pdf which will be converted to a string to be saved in the database.
+
+for both nested forms, users should be able to add as many forms they like.
+
+
+Dashboard
+- a simple table/rows with the job name, creation date
+- this is also where the user can create new job.
+
+Docs/PDF
+- user can upload the resume in textfield, docs or PDF. Logic can be applied at server or client side to open and save to database. However, if there is an error in opening, warning message should be prompted to the user.
+
+* get data as string from pdf/docs
+
+my concern is more to the job form.. if your live example can demonstrate this, i'm good to offer this project to you.
+Rest of the module is not difficult to implement.
