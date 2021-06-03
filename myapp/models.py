@@ -5,24 +5,21 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     pass
 
-    
-class Job(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    position = models.CharField(max_length=300)
-    created_at =  models.DateTimeField(auto_now_add=True)
-    # {'WebDevelopment':['python', 'javascript'], 'Mobile Development':['flutter','react native']}
-    keywords = models.JSONField(null=True)
-
-    def __str__(self):
-        return self.position
-
-class Resume(models.Model):
+class Keyword(models.Model):
     name = models.CharField(max_length=300)
-    contact = models.CharField(max_length=300)
-    file_data = models.TextField()    
 
+class Tag(models.Model):
+    name = models.CharField(max_length=300)
 
-class Applicant(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applicants")
-    apply_date =  models.DateTimeField(auto_now_add=True)
-    resumes = models.ManyToManyField(Resume)
+class Job(models.Model):
+    title = models.CharField(max_length=300)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at =  models.DateTimeField(auto_now_add=True)
+    keywords = models.ManyToManyField(Keyword,through='JobKeywords')
+    def __str__(self):
+        return self.title
+
+class JobKeywords(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tag)

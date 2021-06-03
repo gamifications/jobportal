@@ -10,7 +10,7 @@ class JobListView(generic.list.ListView):
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job
-        fields = ['position'] #,'keywords'] #'__all__'
+        fields = ['title'] #,'keywords'] #'__all__'
 
 class JobCreateView(generic.edit.CreateView):
     form_class = JobForm
