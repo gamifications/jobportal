@@ -2,55 +2,52 @@
 {% load crispy_forms_tags %}
 
     {% block css %}
-    <style type="text/css">
-    .glyphicon-minus-sign:before {
-	    content: "\2212";
-	}
-	.glyphicon-plus-sign:before {
-	    content: "\002b";
-	}
-	.btn-default {
-	    color: #333;
-	    background-color: #fff;
-	    border-color: #ccc;
-	}
-	</style>
+<link rel="stylesheet" type="text/css" href="https://selectize.dev/css/selectize.css">
     {% endblock %}
 
 {% block content %}
 <form method="post" novalidate>
-	{% csrf_token %}
-	{{ form|crispy }}
-	<div id="keywords"></div>
-</form>    {% endblock %}
-{% block js %}
-<script src="https://jsonform.github.io/jsonform/deps/underscore.js"></script>
-<script src="https://jsonform.github.io/jsonform/lib/jsonform.js"></script>
+	
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+        {{ form.title|as_crispy_field }}
+      </div>
+      <div class="form-group col-md-6 mb-0">
+        {{ form.created_by|as_crispy_field }}
+      </div>
+    </div>
+    
+    {{ form.keywords|as_crispy_field }}
+    {{ form.candidate|as_crispy_field }}
+    
+    <button type="submit" class="btn btn-primary">Save Job</button>
+  </form>
+</form>    
 
- <script type="text/javascript">
- 	$('#keywords').jsonForm({
-  "schema": {
-    "keywords": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "title": "Keyword",
-        "properties": {
-          "keyword": {
-            "type": "string",
-            "title": "Keyword Name"
-          },
-          "string": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "title": "String Name"
-            }
-          }
-        }
-      }
-    }
-  }
-});
-    </script>
+{% endblock %}
+{% block js %}
+<script src="https://selectize.dev/js/selectize.js"></script>
+<script type="text/javascript">
+  $("#id_keywords").selectize({
+    delimiter: ",",
+    persist: false,
+    create: function (input) {
+      return {
+        value: input,
+        text: input,
+      };
+    },
+  });
+  $("#id_candidate").selectize({
+    delimiter: ",",
+    persist: false,
+    create: function (input) {
+      return {
+        value: input,
+        text: input,
+      };
+    },
+  });
+</script>
 {% endblock %}
