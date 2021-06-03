@@ -150,6 +150,7 @@ MESSAGE_TAGS = {
 
 
 # Third party apps configuration
+AUTH_USER_MODEL = 'myapp.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
