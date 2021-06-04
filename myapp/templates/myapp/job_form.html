@@ -1,56 +1,50 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags crispy_forms_filters %}
 
-    {% block css %}
-    <style type="text/css">
-    .glyphicon-minus-sign:before {
-	    content: "\2212";
-	}
-	.glyphicon-plus-sign:before {
-	    content: "\002b";
-	}
-	.btn-default {
-	    color: #333;
-	    background-color: #fff;
-	    border-color: #ccc;
-	}
-	</style>
-    {% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="https://selectize.dev/css/selectize.css">
+{% endblock %}
 
 {% block content %}
-<form method="post" novalidate>
-	{% csrf_token %}
-	{{ form|crispy }}
-	<div id="keywords"></div>
-</form>    {% endblock %}
-{% block js %}
-<script src="https://jsonform.github.io/jsonform/deps/underscore.js"></script>
-<script src="https://jsonform.github.io/jsonform/lib/jsonform.js"></script>
+<form method="post" novalidate>{% csrf_token %}
+    {{ formset.management_form }}
+    {{ form|crispy }}
 
- <script type="text/javascript">
- 	$('#keywords').jsonForm({
-  "schema": {
-    "keywords": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "title": "Keyword",
-        "properties": {
-          "keyword": {
-            "type": "string",
-            "title": "Keyword Name"
-          },
-          "string": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "title": "String Name"
-            }
-          }
-        }
-      }
-    }
-  }
-});
-    </script>
+    <hr>
+    {% for form in formset %}
+    <div class="row">
+      <div class="col-md-3">
+        {{ form.keyword|as_crispy_field }}
+      </div>
+      <div class="col-md-9">
+        {{form.tags|as_crispy_field}}
+      </div>
+    </div>
+    {% endfor %}
+    <input class='btn btn-primary' type='submit' value='Save'>
+</form>   
+
+{% endblock %}
+{% block js %}
+<script src="https://selectize.dev/js/selectize.js"></script>
+<script type="text/javascript">
+  $(".selectmultiple").selectize({
+    delimiter: ",",
+    persist: false,
+    create: function (input) {
+      return {
+        value: input,
+        text: input,
+      };
+    },
+  });
+  $(".select").selectize({
+    create: function (input) {
+      return {
+        value: input,
+        text: input,
+      };
+    },
+  });
+</script>
 {% endblock %}

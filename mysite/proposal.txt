@@ -69,3 +69,13 @@ Docs/PDF
 
 my concern is more to the job form.. if your live example can demonstrate this, i'm good to offer this project to you.
 Rest of the module is not difficult to implement.
+
+-----------------------
+didn't add the navbar into the wireframe, but do create one generic navbar which is applicable for all pages.
+1st page - dashboard... from the table, there is the Action buttons..
+if they click edit, it will lead to the 2nd page but with all data.
+if they click view, it will lead to the 3rd page which is the result page
+
+2nd page - form to add new job
+
+i'm still working on the third page which is the result page..

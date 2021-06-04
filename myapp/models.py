@@ -1,25 +1,39 @@
-from django.db import models
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    pass
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=300)
+    def __str__(self):
+        return self.name
+
+class Tag(models.Model):
+    name = models.CharField(max_length=300)
+    def __str__(self):
+        return self.name
+
+
+class Candidate(models.Model):
+    name = models.CharField(max_length=300)
+    jobtitle = models.CharField(max_length=300, default='')
+    salary = models.IntegerField(default=0)
+    def __str__(self):
+        return self.name
+
 
 class Job(models.Model):
+    title = models.CharField(max_length=300)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    position = models.CharField(max_length=300)
     created_at =  models.DateTimeField(auto_now_add=True)
-    # {'WebDevelopment':['python', 'javascript'], 'Mobile Development':['flutter','react native']}
-    keywords = models.JSONField(null=True)
-
+    keywords = models.ManyToManyField(Keyword,through='JobKeywords')
+    candidate = models.ManyToManyField(Candidate)
     def __str__(self):
-        return self.position
+        return self.title
 
-class Resume(models.Model):
-    name = models.CharField(max_length=300)
-    contact = models.CharField(max_length=300)
-    file_data = models.TextField()    
-
-
-class Applicant(models.Model):
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name="applicants")
-    apply_date =  models.DateTimeField(auto_now_add=True)
-    resumes = models.ManyToManyField(Resume)
+class JobKeywords(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tag)
