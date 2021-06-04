@@ -9,12 +9,14 @@
 <form method="post" novalidate>{% csrf_token %}
     {{ formset.management_form }}
     {{ form|crispy }}
+
+    <hr>
     {% for form in formset %}
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-3">
         {{ form.keyword|as_crispy_field }}
       </div>
-      <div class="col-md-6">
+      <div class="col-md-9">
         {{form.tags|as_crispy_field}}
       </div>
     </div>
