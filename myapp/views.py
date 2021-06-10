@@ -1,25 +1,25 @@
-from django import forms
 from django.views import generic
 from django.urls import reverse_lazy
-from myapp.models import Job, Keyword, Candidate, JobKeywords, Tag
+
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
 from django.contrib import messages
 
+from myapp.models import Job, Keyword, Candidate, JobKeywords, Tag
+from myapp.forms import JobForm
 
 class JobListView(generic.list.ListView):
     """Return list of all jobs"""
     model = Job
 
-class JobForm(forms.ModelForm):
-    class Meta:
-        model = Job
-        fields = ['title'] #,'candidate'] '__all__'
 
 
 def job_view(request):
     KeywordFormset = inlineformset_factory(Job,JobKeywords,fields=('keyword', 'tags'),extra=5)
+    CandidateFormset = inlineformset_factory(Job,Candidate,fields=('name', 'jobtitle','salary'),extra=5)
+
     if request.method == 'POST':
+        print(request.POST)
         job = Job.objects.create(title=request.POST['title'], created_by=request.user)
         get_data = lambda n: {'keyword':request.POST[f'jobkeywords_set-{n}-keyword'], 'tags':request.POST.getlist(f'jobkeywords_set-{n}-tags')}
         for n in range(int(request.POST['jobkeywords_set-TOTAL_FORMS'])):
@@ -34,4 +34,6 @@ def job_view(request):
         
     form = JobForm()
     formset = KeywordFormset() # (instance=question)
-    return render(request, 'myapp/job_form.html', {'form': form,'formset': formset})
+    formset2 = CandidateFormset()
+
+    return render(request, 'myapp/job_form.html', {'form': form,'formset': formset,'formset2': formset2})

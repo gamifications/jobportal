@@ -2,3 +2,4 @@ django
 django-allauth
 django-crispy-forms
 python-decouple
+# psycopg2

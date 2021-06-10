@@ -79,3 +79,10 @@ if they click view, it will lead to the 3rd page which is the result page
 2nd page - form to add new job
 
 i'm still working on the third page which is the result page..
+
+june 10
+--------
+this webapp is for recruiters to filter and track job applicants..
+
+you can use the below tutorial for the stripe module :-
+https://www.ordinarycoders.com/blog/article/django-stripe-monthly-subscription
