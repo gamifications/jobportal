@@ -1,7 +1,4 @@
 django
 django-allauth
-
-django-rest-auth
-djangorestframework
 django-crispy-forms
 python-decouple
