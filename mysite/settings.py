@@ -151,6 +151,10 @@ MESSAGE_TAGS = {
 
 
 # Third party apps configuration
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 AUTH_USER_MODEL = 'myapp.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

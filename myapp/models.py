@@ -20,6 +20,7 @@ class Candidate(models.Model):
     name = models.CharField(max_length=300)
     jobtitle = models.CharField(max_length=300, default='')
     salary = models.IntegerField(default=0)
+    resume = models.FileField(null=True)
 
     job = models.ForeignKey('Job', on_delete=models.CASCADE)
     def __str__(self):
@@ -27,6 +28,8 @@ class Candidate(models.Model):
 
 
 class Job(models.Model):
+    class Meta:
+        ordering = ['-created_at']
     STAGE_CHOICES = (
         ('draft', "Draft"),
         ('posted', "Posted"),
