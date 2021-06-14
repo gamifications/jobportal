@@ -32,9 +32,7 @@
         <span class="badge badge-info">{{keyword.name}}</span>{% endfor %}</td>
         <td><a class="btn btn-sm btn-primary mr-2" href="{% url 'job:job' %}?pk={{job.pk}}">edit</a><a class="btn btn-sm btn-danger">delete</a></td>
     </tr>
-	{% empty %}
-	<tr><th colspan="4"><p class=" bg bg-white">There are no jobs.</p></th></tr>
-	{% endfor %}
+	   {% endfor %}
 </tbody>
 </table>
 {% endblock %}
