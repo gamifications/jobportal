@@ -4,6 +4,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django.contrib import admin
 from .models import Job, Candidate, JobKeywords, Keyword, Tag
 from django.core.exceptions import ValidationError
+
 class JobForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,22 +50,41 @@ class CandidateForm(forms.ModelForm):
 
 class KeywordChoiceField(forms.ModelChoiceField):
     def to_python(self, value):
+        """
+        Bug: 
+            what if there is an existing keyword with id -> 44,
+            and i want to create keyword with name 44
+            it will take keyword with existing name 'laptop' instead of name 44
+        """
+
         # https://stackoverflow.com/a/30325345/2351696
-        if isinstance(value, str):
-            # create keyword if not pk
-            return Keyword.objects.get_or_create(name=value)[0]
-        return super().to_python(value)
+        if value.isdigit() and Keyword.objects.filter(id=value):
+            return super().to_python(value)
+        # create new keyword if not pk
+        return Keyword.objects.get_or_create(name=value.title())[0]
         
 class TagsChoiceField(forms.ModelMultipleChoiceField):
-    def to_python(self, value):
-        print(value)
-        for pk in value:
-            print(type(pk))
-        return super().to_python(value)
+    def _check_values(self, value):
+        """
+        Bug: 
+            what if there is an existing tag with id -> 44,
+            and i want to create tag with name 44
+            it will take tag with existing name 'laptop' instead of name 44
+        """
+        new_value = []
+        for pk in value:            
+            if pk.isdigit() and Tag.objects.filter(id=pk):
+                # tag is existing
+                new_value.append(pk)
+            else:
+                # new tag
+                new_tag = Tag.objects.get_or_create(name=pk.lower())[0]
+                new_value.append(str(new_tag.pk))
+        return super()._check_values(new_value)
 
 class JobKeywordsForm(forms.ModelForm):
     keyword = KeywordChoiceField(queryset=Keyword.objects.all())
-    # tags = TagsChoiceField(queryset=Tag.objects.all())
+    tags = TagsChoiceField(queryset=Tag.objects.all())
     class Meta:
         model = JobKeywords
         fields = ['job','keyword','tags'] # '__all__'
@@ -73,26 +93,16 @@ class JobKeywordsForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
-
-    def save(self, commit=True):
-        # https://stackoverflow.com/a/4137576/2351696
-        keyword_name = self.cleaned_data['keyword']
-        print(keyword_name)
-        # keyword = Keyword.objects.get_or_create(name=keyword_name)[0]
-        # self.instance.keyword = keyword
-        return super().save(commit)
-
+        self.fields['keyword'].empty_label = ''
 
 KeywordFormset = forms.inlineformset_factory(
     Job,
     JobKeywords,
-    # fields=('keyword', 'tags'),
     form=JobKeywordsForm,
     extra=2,
     min_num=1,
     validate_min=True,
 )
-
 
 CandidateFormset = forms.inlineformset_factory(
     Job,
@@ -101,7 +111,4 @@ CandidateFormset = forms.inlineformset_factory(
     extra=5,
     min_num=1,
     validate_min=True,
-
-) # fields=('name', 'jobtitle','salary'),extra=5)
-
-
+)
