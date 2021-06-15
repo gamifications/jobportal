@@ -33,9 +33,14 @@
         <div class="col-md-3 job-keywords">
           {{ form.keyword|as_crispy_field }}
         </div>
-        <div class="col-md-9 job-tags">
+        <div class="col-md-7 job-tags">
           {{form.tags|as_crispy_field}}
         </div>
+        {% if form.instance.pk %}
+        <div class="col-md-2">
+          <b>{{ form.DELETE.label_tag }}</b> {{ form.DELETE}}
+        </div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
@@ -88,13 +93,15 @@
 
   $(document).ready(function () {
     $(".job-keywords select").selectize({create: a => ({value:a, text:a})});
-    $(".job-tags select").selectize({delimiter: ",",persist: false,create: a => ({value:a, text:a})});
+    $(".job-tags select").selectize({plugins: ['remove_button'],delimiter: ",",persist: false,create: a => ({value:a, text:a})});
 
     $('.dateinput').datepicker({
       // dateFormat: "dd/mm/yyyy",
+      language: 'en',
       dateFormat: "yyyy-mm-dd",
       autoClose: true
     });
+    $('.dateinput').attr("autocomplete", "off");
   });
 
 </script>

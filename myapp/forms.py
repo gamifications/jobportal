@@ -1,9 +1,11 @@
-from django import forms
+import re
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
+from django import forms
 from django.contrib import admin
-from .models import Job, Candidate, JobKeywords, Keyword, Tag
 from django.core.exceptions import ValidationError
+
+from .models import Job, Candidate, JobKeywords, Keyword, Tag
 
 class JobForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -60,6 +62,9 @@ class KeywordChoiceField(forms.ModelChoiceField):
         # https://stackoverflow.com/a/30325345/2351696
         if value.isdigit() and Keyword.objects.filter(id=value):
             return super().to_python(value)
+        # if not re.match(r'^[A-Za-z]', value):
+        #     raise ValidationError('Keyword must startwith Character.', code='character')
+
         # create new keyword if not pk
         return Keyword.objects.get_or_create(name=value.title())[0]
         
@@ -99,6 +104,7 @@ KeywordFormset = forms.inlineformset_factory(
     Job,
     JobKeywords,
     form=JobKeywordsForm,
+    can_delete=True,
     extra=2,
     min_num=1,
     validate_min=True,
