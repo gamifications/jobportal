@@ -46,7 +46,7 @@ class Job(models.Model):
     closing_date = models.DateField(blank=True, null=True)
     reporting_line = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     stage = models.CharField(max_length=20,choices=STAGE_CHOICES, default='draft')
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='+', null=True)
     created_at =  models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword,through='JobKeywords')
     def __str__(self):

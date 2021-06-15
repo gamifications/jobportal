@@ -11,8 +11,10 @@
 
 {% block content %}
 <form method="post" enctype="multipart/form-data">
+
+
   <!-- Job Form -->  
-  {% crispy form %}
+  {% crispy jobform %}
 
   <!-- Keywords Form -->
   {{ formset.management_form }}
@@ -26,6 +28,7 @@
         <div class="col-md-9">Tags</div>
       </div>
       {% for form in formset %}
+      {{ form.id }}
       <div class="row">
         <div class="col-md-3 job-keywords">
           {{ form.keyword|as_crispy_field }}
@@ -52,6 +55,7 @@
         <div class="col-md-3">Resume</div>
       </div>
       {% for form in formset2 %}
+      {{ form.id }}
       <div class="row">
         <div class="col-md-3">
           {{ form.name|as_crispy_field }}
