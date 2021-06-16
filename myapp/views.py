@@ -108,7 +108,9 @@ class JobView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, {'jobform': form,'formset': formset,'formset2': formset2})
 
-
+class JobDetailView(generic.DetailView):
+    model = Job
+    
 class JobDeleteView(generic.edit.DeleteView):
     model = Job
     success_url = reverse_lazy('job:list')
