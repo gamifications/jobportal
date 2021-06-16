@@ -2,17 +2,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # from django.contrib.postgres.fields import IntegerRangeField
 from django.urls import reverse
+from django.core.validators import MinLengthValidator, FileExtensionValidator
+
 
 class User(AbstractUser):
     pass
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
 
 class Tag(models.Model):
-    name = models.CharField(max_length=300)
+    name = models.CharField(max_length=300, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
 
@@ -35,7 +37,8 @@ class Candidate(models.Model):
     email = models.EmailField()
     jobtitle = models.CharField(max_length=300, default='')
     salary = models.IntegerField(default=0)
-    resume = models.FileField(null=True, blank=True)
+    resume = models.FileField(null=True, blank=True,
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])])
     resume_data = models.TextField(blank=True)
     def __str__(self):
         return self.name

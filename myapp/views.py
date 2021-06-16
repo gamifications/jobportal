@@ -13,12 +13,19 @@ class JobListView(LoginRequiredMixin, generic.list.ListView):
     """Return list of all jobs"""
     model = Job
 
-
 class JobView(LoginRequiredMixin, View):
     frm1 = JobForm
     frm2 = KeywordFormset
     frm3 = CandidateFormset
     template_name = 'myapp/job_form.html'
+
+    def parse_pdf_and_save(self, job):        
+        from pdfminer.high_level import extract_text
+        candidates = Candidate.objects.filter(job=job,resume__isnull=False)
+        for candidate in candidates:
+            if not candidate.resume_data:
+                candidate.resume_data = extract_text(candidate.resume.path)
+                candidate.save()
 
     def get(self, request, pk=None):
         if pk:
@@ -37,12 +44,16 @@ class JobView(LoginRequiredMixin, View):
             'formset2': formset2, 'pk':pk})
 
     def on_error_set_newly_created_tags_and_keyword(self, post_data):
+        """
+        This is buggy need to remove it
+        """
         post_data = post_data.copy()
         for n in range(int(post_data['jobkeywords_set-TOTAL_FORMS'])):
             # 'jobkeywords_set-4-tags': ['2', 'sadf', 'suhail'],  'jobkeywords_set-1-keyword': ['4'] 
             key1 = f'jobkeywords_set-{n}-keyword'
             key2 = f'jobkeywords_set-{n}-tags'
-            if not post_data[key1].isdigit():
+            if not post_data[key1].isdigit() and post_data[key1]:
+                # print('keyword:',key1, post_data[key1])
                 post_data.update({key1: str(Keyword.objects.get(name=post_data[key1]).pk)})
 
             tags = []
@@ -50,7 +61,7 @@ class JobView(LoginRequiredMixin, View):
                 if not item.isdigit():
                     # update post_data
                     tags.append(str(Tag.objects.get(name=item).pk))
-                else:
+                elif item:
                     tags.append(item)
             post_data.setlist(key2, tags) # https://stackoverflow.com/a/22210263/2351696
             
@@ -82,9 +93,14 @@ class JobView(LoginRequiredMixin, View):
             if f1.is_valid() and f2.is_valid():
                 f1.save()
                 f2.save()
+            try:
+                self.parse_pdf_and_save(job)
+            except:
+                messages.warning(request, 'Unable to parse the PDF files.')
             messages.success(request, 'Job saved successfully.')
             return redirect('job:list')
         else:
+            # print('|',form.errors,'++',formset.errors,'--',formset2.errors,'|')
             # reselect newly added keyword and tags
             post_data = self.on_error_set_newly_created_tags_and_keyword(request.POST)
             # need to update request.post with keywords and tags

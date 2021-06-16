@@ -40,6 +40,7 @@ class JobForm(forms.ModelForm):
         self.helper.form_tag = False
 
     # def clean(self):
+    #     """ Bug: if error, Keyword Form all tags are required"""
     #     cleaned_data = super().clean()
     #     if cleaned_data.get("closing_date")<cleaned_data.get("start_date"):
     #         raise forms.ValidationError("Closing date should be greater than start date.")
@@ -90,6 +91,8 @@ class TagsChoiceField(forms.ModelMultipleChoiceField):
             what if there is an existing tag with id -> 44,
             and i want to create tag with name 44
             it will take tag with existing name 'laptop' instead of name 44
+
+        Bug2: Django model validator not working(min_length=2)
         """
         new_value = []
         for pk in value:            
@@ -103,6 +106,9 @@ class TagsChoiceField(forms.ModelMultipleChoiceField):
         return super()._check_values(new_value)
 
 class JobKeywordsForm(forms.ModelForm):
+    """
+    Bug: Django model validator not working(min_length=2)
+    """
     keyword = KeywordChoiceField(queryset=Keyword.objects.all())
     tags = TagsChoiceField(queryset=Tag.objects.all())
     class Meta:
