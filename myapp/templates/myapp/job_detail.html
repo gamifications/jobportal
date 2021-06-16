@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/responsive.bootstrap4.min.css' %}">
+{% endblock %}
 {% block content %}
 <h3>View Job</h3>
 <nav aria-label="breadcrumb">
@@ -26,4 +31,41 @@
 <p>{{job.closing_date}}</p>
 <p>{{reporting_line}}</p>
 <p>{{job.stage}}</p>
+
+
+<table class="table table-bordered dt-responsive nowrap" style="width:100%" id="candidatelist">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Position</th>
+      <th scope="col">Posted on</th>
+      <th scope="col">Keywords</th>
+    </tr>
+  </thead>
+  <tbody>
+  	
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>sfsad</td>
+      <td>adfasdf</td>
+      <td>asdfsdfasd</td>
+      
+    </tr>
+</tbody>
+</table>
+{% endblock %}
+{% block js %}
+<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'datatables/responsive.bootstrap4.min.js' %}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#candidatelist').DataTable({
+      "pageLength": 10
+    });
+});
+</script>
+
 {% endblock %}
