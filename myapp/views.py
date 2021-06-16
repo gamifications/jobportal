@@ -33,7 +33,8 @@ class JobView(LoginRequiredMixin, View):
             formset = self.frm2()
             formset2 = self.frm3()
 
-        return render(request, self.template_name, {'jobform': form,'formset': formset,'formset2': formset2})
+        return render(request, self.template_name, {'jobform': form,'formset': formset,
+            'formset2': formset2, 'pk':pk})
 
     def on_error_set_newly_created_tags_and_keyword(self, post_data):
         post_data = post_data.copy()
@@ -90,3 +91,8 @@ class JobView(LoginRequiredMixin, View):
             formset = self.frm2(post_data) 
 
         return render(request, self.template_name, {'jobform': form,'formset': formset,'formset2': formset2})
+
+
+class JobDeleteView(generic.edit.DeleteView):
+    model = Job
+    success_url = reverse_lazy('job:list')

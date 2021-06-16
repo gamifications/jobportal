@@ -12,7 +12,12 @@ class JobForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'title',
+            # 'title',
+            Row(
+                Column('title', css_class='form-group col-md-4 mb-0'),
+                Column('description', css_class='form-group col-md-8 mb-0'),
+                css_class='form-row'
+            ),     
             Row(
                 Column('department', css_class='form-group col-md-6 mb-0'),
                 Column('category', css_class='form-group col-md-6 mb-0'),
@@ -34,9 +39,19 @@ class JobForm(forms.ModelForm):
         )
         self.helper.form_tag = False
 
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     if cleaned_data.get("closing_date")<cleaned_data.get("start_date"):
+    #         raise forms.ValidationError("Closing date should be greater than start date.")
+
+    #     if cleaned_data.get("salary_high")<cleaned_data.get("salary_low"):
+    #         raise forms.ValidationError("Salary high should be greater than Salary low.")
+    #     return cleaned_data
+
+
     class Meta:
         model = Job
-        fields = ['title','department','category','salary_low','salary_high','start_date',
+        fields = ['title','description','department','category','salary_low','salary_high','start_date',
             'closing_date','reporting_line','stage'] # '__all__'
 
 class CandidateForm(forms.ModelForm):
@@ -47,7 +62,7 @@ class CandidateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_show_labels = False
+        # self.helper.form_show_labels = False
 
 
 class KeywordChoiceField(forms.ModelChoiceField):
@@ -105,7 +120,7 @@ KeywordFormset = forms.inlineformset_factory(
     JobKeywords,
     form=JobKeywordsForm,
     can_delete=True,
-    extra=2,
+    extra=4,
     min_num=1,
     validate_min=True,
 )
@@ -114,7 +129,7 @@ CandidateFormset = forms.inlineformset_factory(
     Job,
     Candidate,
     form=CandidateForm,
-    extra=5,
+    extra=4,
     min_num=1,
     validate_min=True,
 )

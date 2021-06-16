@@ -10,9 +10,18 @@
 {% endblock %}
 
 {% block content %}
+
+{% if pk %}
+<h3>Edit Job</h3>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'job:list' %}">Jobs</a></li>
+    <li class="breadcrumb-item active" aria-current="page">#{{pk}}</li>
+  </ol>
+</nav>
+{% endif %}
+
 <form method="post" enctype="multipart/form-data">
-
-
   <!-- Job Form -->  
   {% crispy jobform %}
 
@@ -25,7 +34,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-md-3">Keyword</div>
-        <div class="col-md-9">Tags</div>
+        <div class="col-md-8">Tags</div>
       </div>
       {% for form in formset %}
       {{ form.id }}
@@ -33,12 +42,12 @@
         <div class="col-md-3 job-keywords">
           {{ form.keyword|as_crispy_field }}
         </div>
-        <div class="col-md-7 job-tags">
-          {{form.tags|as_crispy_field}}
+        <div class="col-md-8 job-tags">
+          {{form.tags|as_crispy_field}} 
         </div>
         {% if form.instance.pk %}
-        <div class="col-md-2">
-          <b>{{ form.DELETE.label_tag }}</b> {{ form.DELETE}}
+        <div class="col-md-1">
+          <small>Delete:</small><br>{{ form.DELETE}}
         </div>
         {% endif %}
       </div>
@@ -53,33 +62,41 @@
       Candidates
     </div>
     <div class="card-body">
-      <div class="row">
-        <div class="col-md-3">Candidate Name</div>
-        <div class="col-md-3">Job Title</div>
-        <div class="col-md-3">Salary Requested</div>
-        <div class="col-md-3">Resume</div>
-      </div>
       {% for form in formset2 %}
       {{ form.id }}
+      <div class="row">
+        <div class="col-md-2"><p class="lead">Candidate: {{forloop.counter}}</p></div>
+        <div class="col-md-10"><hr></div>
+      </div>
       <div class="row">
         <div class="col-md-3">
           {{ form.name|as_crispy_field }}
         </div>
         <div class="col-md-3">
+          {{ form.email|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
           {{form.jobtitle|as_crispy_field}}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           {{form.salary|as_crispy_field}}
         </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-9">
+          {{form.resume_data|as_crispy_field}}
+        </div>
         <div class="col-md-3">
-          {{form.resume|as_crispy_field}}
+          <p>Resume File</p>
+          {{form.resume}}
         </div>
       </div>
       {% endfor %}
     </div>
   </div>
   <hr>    
-  <button class="btn btn-primary" type="submit">Save Job</button>
+  <button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-save"></i> Save Job</button>
 </form>   
 
 {% endblock %}
@@ -93,10 +110,10 @@
 
   $(document).ready(function () {
     $(".job-keywords select").selectize({create: a => ({value:a, text:a})});
-    $(".job-tags select").selectize({plugins: ['remove_button'],delimiter: ",",persist: false,create: a => ({value:a, text:a})});
+    $(".job-tags select").selectize({plugins: ['remove_button'],delimiter: ",",
+      persist: false,create: a => ({value:a, text:a})});
 
     $('.dateinput').datepicker({
-      // dateFormat: "dd/mm/yyyy",
       language: 'en',
       dateFormat: "yyyy-mm-dd",
       autoClose: true
