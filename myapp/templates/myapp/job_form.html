@@ -1,50 +1,132 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags crispy_forms_filters %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="https://selectize.dev/css/selectize.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://selectize.dev/css/selectize.css"> -->
+<link href="{% static 'selectize/selectize.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'selectize/selectize.bootstrap4.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'airdatepicker/datepicker.min.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block content %}
-<form method="post" novalidate>{% csrf_token %}
-    {{ formset.management_form }}
-    {{ form|crispy }}
 
-    <hr>
-    {% for form in formset %}
-    <div class="row">
-      <div class="col-md-3">
-        {{ form.keyword|as_crispy_field }}
-      </div>
-      <div class="col-md-9">
-        {{form.tags|as_crispy_field}}
-      </div>
+{% if pk %}
+<h3>Edit Job</h3>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'job:list' %}">Jobs</a></li>
+    <li class="breadcrumb-item active" aria-current="page">#{{pk}}</li>
+  </ol>
+</nav>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+  <!-- Job Form -->  
+  {% crispy jobform %}
+
+  <!-- Keywords Form -->
+  {{ formset.management_form }}
+  <div class="card mb-4">
+    <div class="card-header">
+      Keywords
     </div>
-    {% endfor %}
-    <input class='btn btn-primary' type='submit' value='Save'>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">Keyword</div>
+        <div class="col-md-8">Tags</div>
+      </div>
+      {% for form in formset %}
+      {{ form.id }}
+      <div class="row">
+        <div class="col-md-3 job-keywords">
+          {{ form.keyword|as_crispy_field }}
+        </div>
+        <div class="col-md-8 job-tags">
+          {{form.tags|as_crispy_field}} 
+        </div>
+        {% if form.instance.pk %}
+        <div class="col-md-1">
+          <small>Delete:</small><br>{{ form.DELETE}}
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Candidates Form -->
+  {{ formset2.management_form }}
+  <div class="card">
+    <div class="card-header">
+      Candidates
+    </div>
+    <div class="card-body">
+      {% for form in formset2 %}
+      {{ form.id }}
+      <div class="row">
+        <div class="col-md-2"><p class="lead">Candidate: {{forloop.counter}}</p></div>
+        <div class="col-md-10"><hr></div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          {{ form.name|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+          {{ form.email|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+          {{form.jobtitle|as_crispy_field}}
+        </div>
+        <div class="col-md-2">
+          {{form.salary|as_crispy_field}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-9">
+          {{form.resume_data|as_crispy_field}}
+        </div>
+        <div class="col-md-3">
+          <p>Resume File</p>
+          {{form.resume}}
+          {% if form.resume.errors %}
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Error!</h4>
+            <small>{{form.resume.errors}}</small>
+          </div>
+          {% endif %}
+          
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <hr>    
+  <button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-save"></i> Save Job</button>
 </form>   
 
 {% endblock %}
 {% block js %}
-<script src="https://selectize.dev/js/selectize.js"></script>
+<script src="{% static 'airdatepicker/datepicker.min.js' %}"></script>
+<script src="{% static 'airdatepicker/datepicker.en.js' %}"></script>
+<script src="{% static 'selectize/selectize.js' %}"></script>
+<!-- <script src="https://selectize.dev/js/selectize.js"></script> -->
+
 <script type="text/javascript">
-  $(".selectmultiple").selectize({
-    delimiter: ",",
-    persist: false,
-    create: function (input) {
-      return {
-        value: input,
-        text: input,
-      };
-    },
+
+  $(document).ready(function () {
+    $(".job-keywords select").selectize({create: a => ({value:a, text:a})});
+    $(".job-tags select").selectize({plugins: ['remove_button'],delimiter: ",",
+      persist: false,create: a => ({value:a, text:a})});
+
+    $('.dateinput').datepicker({
+      language: 'en',
+      dateFormat: "yyyy-mm-dd",
+      autoClose: true
+    });
+    $('.dateinput').attr("autocomplete", "off");
   });
-  $(".select").selectize({
-    create: function (input) {
-      return {
-        value: input,
-        text: input,
-      };
-    },
-  });
+
 </script>
 {% endblock %}

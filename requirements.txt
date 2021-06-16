@@ -1,12 +1,11 @@
 django
 django-allauth
-
-django-rest-auth
-djangorestframework
 django-crispy-forms
 python-decouple
+pdfminer.six
 
 gunicorn
 whitenoise
 dj-database-url 
 psycopg2
+

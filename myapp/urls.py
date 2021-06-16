@@ -3,5 +3,9 @@ from . import views
 app_name='job'
 urlpatterns = [
 	path('', views.JobListView.as_view(), name='list'),
-	path('new/', views.job_view, name='create'),
+	path('create/', views.JobView.as_view(), name='create'),
+	path('view/<int:pk>/', views.JobDetailView.as_view(), name='view'),
+	path('edit/<int:pk>/', views.JobView.as_view(), name='edit'),
+	path('delete/<int:pk>/', views.JobDeleteView.as_view(), name='delete'),
+
 ]

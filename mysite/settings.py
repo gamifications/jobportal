@@ -42,13 +42,8 @@ INSTALLED_APPS = [
     'myapp',
     'crispy_forms',
 
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',
-
     'allauth',
     'allauth.account',
-    'rest_auth.registration',
 
 ]
 
@@ -165,6 +160,10 @@ MESSAGE_TAGS = {
 
 
 # Third party apps configuration
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 AUTH_USER_MODEL = 'myapp.User'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -188,10 +187,4 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOGIN_REDIRECT_URL='/'
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
+LOGIN_URL = 'account_login'

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>View Job</h3>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'job:list' %}">Jobs</a></li>
+    <li class="breadcrumb-item active" aria-current="page">#{{pk}}</li>
+  </ol>
+</nav>
+
+<p>{{job.title}}</p>
+<p>{{job.created_at|date:"SHORT_DATE_FORMAT"}}</p>
+<p>
+{% for keyword in job.keywords.all %}
+  <span style="font-size: 5px">{# keyword.jobkeywords_set.get(job=job).tags.all #}</span>
+  <span class="badge badge-info">{{keyword.name}}</span>
+{% endfor %}
+</p>
+
+<p>{{job.description}}</p>
+<p>{{job.department}}</p>
+<p>{{job.category}}</p>
+<p>{{job.salary_low}}</p>
+<p>{{job.salary_high}}</p>
+<p>{{job.start_date}}</p>
+<p>{{job.closing_date}}</p>
+<p>{{reporting_line}}</p>
+<p>{{job.stage}}</p>
+{% endblock %}
