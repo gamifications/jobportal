@@ -8,23 +8,23 @@
 {% block content %}
 
 
-<table class="table table-bordered dt-responsive nowrap" style="width:100%" id="joblist">
+<table class="table table-sm table-bordered dt-responsive nowrap compact" style="width:100%" id="joblist">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Position</th>
       <th scope="col">Posted on</th>
       <th scope="col">Keywords</th>
+      <th>Stage</th>
       <th></th>
-      <th>Description</th>
-      <th>Department</th>
-      <th>Category</th>
+      <th>Category</th>      
       <th>Salary low</th>
       <th>Salary high</th>
       <th>Start date</th>
       <th>Closing date</th>
-      <th>Reporting line</th>
-      <th>Stage</th>
+      <th>Reporting line</th>      
+      <th>Description</th>
+      <th>Department</th>
     </tr>
   </thead>
   <tbody>
@@ -39,22 +39,21 @@
           <span class="badge badge-info">{{keyword.name}}</span>
         {% endfor %}
       </td>
-      
+      <td>{{job.stage}}</td>
       <td>
-        <a href="{% url 'job:view' job.pk %}" class="btn btn-outline-success"><i class="fa fa-window-maximize fa-lg"></i></a>
-        <a href="{% url 'job:edit' job.pk %}" class="btn btn-outline-warning mr-2"><i class="fa fa-pencil-square-o fa-lg"></i></a>
-        <a href="{% url 'job:delete' job.pk %}" class="btn btn-outline-danger"><i class="fa fa-trash-o fa-lg"></i></a>
+        <a href="{% url 'job:view' job.pk %}" class="btn btn-outline-success btn-sm" title="View Job"><i class="fa fa-window-maximize fa-lg"></i></a>
+        <a href="{% url 'job:edit' job.pk %}" class="btn btn-outline-warning btn-sm" title="Edit Job"><i class="fa fa-pencil-square-o fa-lg"></i></a>
+        <a href="{% url 'job:delete' job.pk %}" class="btn btn-outline-danger btn-sm" title="Delete Job"><i class="fa fa-trash-o fa-lg"></i></a>
 
       </td>
-      <td>{{job.description}}</td>
-      <td>{{job.department}}</td>
       <td>{{job.category}}</td>
       <td>{{job.salary_low}}</td>
       <td>{{job.salary_high}}</td>
       <td>{{job.start_date}}</td>
       <td>{{job.closing_date}}</td>
       <td>{{job.reporting_line}}</td>
-      <td>{{job.stage}}</td>
+      <td>{{job.description}}</td>
+      <td>{{job.department}}</td>
     </tr>
 	  {% endfor %}
 </tbody>

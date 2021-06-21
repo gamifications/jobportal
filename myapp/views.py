@@ -1,7 +1,7 @@
 from django.views import generic, View
 from django.urls import reverse_lazy
-
-from django.shortcuts import render, redirect,reverse
+from django.http import Http404
+from django.shortcuts import render, redirect,reverse, get_object_or_404
 from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,9 +9,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from myapp.models import Job, Keyword, Candidate, JobKeywords, Tag
 from myapp.forms import JobForm, CandidateFormset, KeywordFormset
 
+
+
 class JobListView(LoginRequiredMixin, generic.list.ListView):
     """Return list of all jobs"""
-    model = Job
+    def get_queryset(self):
+        return Job.objects.filter(created_by=self.request.user)
 
 class JobView(LoginRequiredMixin, View):
     frm1 = JobForm
@@ -30,7 +33,7 @@ class JobView(LoginRequiredMixin, View):
     def get(self, request, pk=None):
         if pk:
             # Edit Job
-            job = Job.objects.get(pk=pk)
+            job = get_object_or_404(Job, pk=pk, created_by=request.user) # Job.objects.get(pk=pk)
             form = self.frm1(instance=job)
             formset = self.frm2(instance=job)
             formset2 = self.frm3(instance=job)
@@ -70,7 +73,7 @@ class JobView(LoginRequiredMixin, View):
     def post(self, request, pk=None):
         if pk:
             # Edit Job
-            job = Job.objects.get(pk=pk)
+            job = get_object_or_404(Job, pk=pk, created_by=request.user) # Job.objects.get(pk=pk)
             form = self.frm1(request.POST, instance=job)
             formset = self.frm2(request.POST, instance=job)
             formset2 = self.frm3(request.POST, request.FILES, instance=job)
@@ -110,7 +113,24 @@ class JobView(LoginRequiredMixin, View):
 
 class JobDetailView(generic.DetailView):
     model = Job
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['jobkeywords'] = JobKeywords.objects.filter(job=context['job'])
+        return context
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.created_by!=self.request.user:
+            raise Http404("Access Denied")
+        return obj
     
 class JobDeleteView(generic.edit.DeleteView):
     model = Job
     success_url = reverse_lazy('job:list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.created_by!=self.request.user:
+            raise Http404("Access Denied")
+        return obj

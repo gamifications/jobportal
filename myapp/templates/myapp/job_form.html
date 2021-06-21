@@ -28,9 +28,7 @@
   <!-- Keywords Form -->
   {{ formset.management_form }}
   <div class="card mb-4">
-    <div class="card-header">
-      Keywords
-    </div>
+    <div class="card-header">Keywords</div>
     <div class="card-body">
       <div class="row">
         <div class="col-md-3">Keyword</div>
@@ -58,52 +56,23 @@
   <!-- Candidates Form -->
   {{ formset2.management_form }}
   <div class="card">
-    <div class="card-header">
-      Candidates
-    </div>
+    <div class="card-header">Candidates</div>
     <div class="card-body">
-      {% for form in formset2 %}
-      {{ form.id }}
-      <div class="row">
-        <div class="col-md-2"><p class="lead">Candidate: {{forloop.counter}}</p></div>
-        <div class="col-md-10"><hr></div>
-      </div>
-      <div class="row">
-        <div class="col-md-3">
-          {{ form.name|as_crispy_field }}
-        </div>
-        <div class="col-md-3">
-          {{ form.email|as_crispy_field }}
-        </div>
-        <div class="col-md-4">
-          {{form.jobtitle|as_crispy_field}}
-        </div>
-        <div class="col-md-2">
-          {{form.salary|as_crispy_field}}
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-9">
-          {{form.resume_data|as_crispy_field}}
-        </div>
-        <div class="col-md-3">
-          <p>Resume File</p>
-          {{form.resume}}
-          {% if form.resume.errors %}
-          <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Error!</h4>
-            <small>{{form.resume.errors}}</small>
-          </div>
-          {% endif %}
-          
-        </div>
-      </div>
+      <div id="candidate_form">
+      {% for form in formset2 %}        
+        {{ form.id }}
+        {% crispy form %}<hr>
       {% endfor %}
+      </div>
+      <div id="empty_form" style="display: none;">
+        {% crispy formset2.empty_form %}<hr>
+      </div>
+      <button class="btn btn-info btn-sm float-right" type="button" id="add_more"><i class="fa fa-plus"></i> Add More Candidate</button>
     </div>
   </div>
-  <hr>    
-  <button class="btn btn-primary btn-lg" type="submit"><i class="fa fa-save"></i> Save Job</button>
+  <br>
+  <button class="btn btn-success float-right" type="submit"><i class="fa fa-save"></i> Save Job</button>
+
 </form>   
 
 {% endblock %}
@@ -126,6 +95,17 @@
       autoClose: true
     });
     $('.dateinput').attr("autocomplete", "off");
+    
+    $('#add_more').click(function() {
+      // https://stackoverflow.com/a/8097617/2351696
+      const frm = 'candidate';
+      const form_idx = $(`#id_${frm}_set-TOTAL_FORMS`).val();
+      $('#candidate_form').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+      $('#candidate_form').find('div.form-row:last').hide().fadeIn(2000);
+      $(`#id_${frm}_set-TOTAL_FORMS`).val(parseInt(form_idx) + 1);
+      // cloneMore('div.candidate_form:last', 'candidate');
+    });
+
   });
 
 </script>

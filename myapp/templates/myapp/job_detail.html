@@ -1,29 +1,131 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/responsive.bootstrap4.min.css' %}">
+
+{% endblock %}
+
+
 {% block content %}
-<h3>View Job</h3>
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'job:list' %}">Jobs</a></li>
-    <li class="breadcrumb-item active" aria-current="page">#{{pk}}</li>
-  </ol>
-</nav>
+<h3>{{job.title}}</h3>
+<hr style="margin: 0">
+<small class="text-muted">posted on: {{job.created_at|naturaltime}}</small>
+<div class="row">
+  <div class="col-md-6"><p>Stage <span class="badge badge-secondary">{{job.stage}}</span></p></div>
+  <div class="col-md-6"><p>Reporting line: {{job.reporting_line}}</p></div>
+</div>
 
-<p>{{job.title}}</p>
-<p>{{job.created_at|date:"SHORT_DATE_FORMAT"}}</p>
-<p>
-{% for keyword in job.keywords.all %}
-  <span style="font-size: 5px">{# keyword.jobkeywords_set.get(job=job).tags.all #}</span>
-  <span class="badge badge-info">{{keyword.name}}</span>
-{% endfor %}
-</p>
+<div class="alert alert-info" role="alert">
+  <strong>Description:</strong>
+  <p>{{job.description}}</p>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Department</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.department}}</div>
+        </div><hr>
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Salary low</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.salary_low}}</div>
+        </div><hr>
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Salary high</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.salary_high}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Category</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.category}}</div>
+        </div><hr>
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Start date</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.start_date}}</div>
+        </div><hr>
+        <div class="row">
+          <div class="col-sm-4"><h6 class="mb-0">Closing date</h6></div>
+          <div class="col-sm-8 text-secondary">{{job.closing_date}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>{{job.description}}</p>
-<p>{{job.department}}</p>
-<p>{{job.category}}</p>
-<p>{{job.salary_low}}</p>
-<p>{{job.salary_high}}</p>
-<p>{{job.start_date}}</p>
-<p>{{job.closing_date}}</p>
-<p>{{reporting_line}}</p>
-<p>{{job.stage}}</p>
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mt-3">
+      <div class="card-header">Keywords</div>
+      <ul class="list-group list-group-flush">
+        {% for jobkeyword in jobkeywords %}
+        <li class="list-group-item">
+          <strong>{{jobkeyword.keyword.name}}: </strong>
+          {% for tag in jobkeyword.tags.all %}
+            <span class="badge badge-info mr-2">{{tag.name}}</span>
+          {% endfor %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<hr>
+
+<table class="table table-bordered dt-responsive nowrap" style="width:100%" id="candidatelist">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Candidate Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Job Title</th>
+      <th scope="col">Salary Expected</th>
+      <th scope="col">Resume</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for candidate in job.candidate_set.all %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{candidate.name}}</td>
+      <td>{{candidate.email}}</td>
+      <td>{{candidate.jobtitle}}</td>
+      <td>{{candidate.salary}}</td>
+      <td>{{candidate.resume_data}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+{% block js %}
+<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'datatables/responsive.bootstrap4.min.js' %}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#candidatelist').DataTable({
+      "pageLength": 10,
+      columnDefs: [
+        {
+          render: function (data, type, full, meta) {
+            return "<div style='white-space:normal; width:90%;'>" + data + "</div>";
+          },
+          targets: 5
+        }
+     ]
+    });
+});
+</script>
+
 {% endblock %}

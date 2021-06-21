@@ -63,7 +63,23 @@ class CandidateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        # self.helper.form_show_labels = False
+        self.helper.use_custom_control = False
+        self.fields['resume_data'].widget.attrs = {'rows': 4}
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-3 mb-0'),
+                Column('email', css_class='form-group col-md-3 mb-0'),
+                Column('jobtitle', css_class='form-group col-md-3 mb-0'),
+                Column('salary', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('resume_data',css_class='form-group col-md-8 mb-0'),
+                Column('resume', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+        )
+        self.helper.form_tag = False
 
 
 class KeywordChoiceField(forms.ModelChoiceField):
@@ -135,7 +151,7 @@ CandidateFormset = forms.inlineformset_factory(
     Job,
     Candidate,
     form=CandidateForm,
-    extra=4,
+    extra=0,
     min_num=1,
     validate_min=True,
 )
