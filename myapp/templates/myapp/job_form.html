@@ -101,6 +101,7 @@
       const frm = 'candidate';
       const form_idx = $(`#id_${frm}_set-TOTAL_FORMS`).val();
       $('#candidate_form').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+      $('#candidate_form').find('div.form-row:last').hide().fadeIn(2000);
       $(`#id_${frm}_set-TOTAL_FORMS`).val(parseInt(form_idx) + 1);
       // cloneMore('div.candidate_form:last', 'candidate');
     });
