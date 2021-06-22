@@ -37,6 +37,7 @@
               {% url 'job:list' as job_list %}
               {% url 'job:edit' as job_edit %}
               {% url 'job:create' as job_create %}
+              {% url 'payments:home' as billings %}
               
               <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item">
@@ -45,6 +46,9 @@
                 
                 <li class="nav-item">
                   <a class="nav-link{% if job_create in request.path %} active{% endif %}" href="{{ job_create }}"><i class="fa fa-plus"></i> Create Job</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link{% if billings in request.path %} active{% endif %}" href="{{ billings }}"><i class="fa fa-user"></i> Billings</a>
                 </li>
                 
               </ul>
