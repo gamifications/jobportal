@@ -3,18 +3,20 @@ from django.contrib.auth.models import AbstractUser
 # from django.contrib.postgres.fields import IntegerRangeField
 from django.urls import reverse
 from django.core.validators import MinLengthValidator, FileExtensionValidator
-
+from djstripe.models import Customer, Subscription
 
 class User(AbstractUser):
-    pass
+    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
+    subscription = models.ForeignKey(Subscription, null=True, blank=True,on_delete=models.SET_NULL)
+
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=300, validators=[MinLengthValidator(2)])
+    name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
 
 class Tag(models.Model):
-    name = models.CharField(max_length=300, validators=[MinLengthValidator(2)])
+    name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
 

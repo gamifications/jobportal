@@ -22,7 +22,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('myapp.urls')),
+    path('payment/', include('payments.urls')),
     path('account/', include('allauth.urls')),
+    path("stripe/", include("djstripe.urls", namespace="djstripe")),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

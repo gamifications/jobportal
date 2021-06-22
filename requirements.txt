@@ -3,9 +3,9 @@ django-allauth
 django-crispy-forms
 python-decouple
 pdfminer.six
+dj-stripe
+psycopg2
 
 gunicorn
 whitenoise
 dj-database-url 
-psycopg2
-
