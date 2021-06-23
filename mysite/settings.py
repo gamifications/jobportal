@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True # False
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -98,17 +98,17 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'job',
-    'USER': 'postgres',
-    'PASSWORD': 'root',
-    'HOST': '127.0.0.1',
-    'PORT': '5432',
-  } 
-}
+if config('POSTGRES', cast=bool):
+    DATABASES = {
+      'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'job',
+        'USER': 'postgres',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+      } 
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -194,10 +194,11 @@ LOGIN_REDIRECT_URL='/'
 LOGIN_URL = 'account_login'
 
 
-# STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<live secret key>")
+STRIPE_LIVE_PUBLIC_KEY =config('STRIPE_LIVE_PUBLIC_KEY')
+STRIPE_LIVE_SECRET_KEY =config('STRIPE_LIVE_SECRET_KEY')
 STRIPE_TEST_PUBLIC_KEY =config('STRIPE_TEST_PUBLIC_KEY')
 STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
-STRIPE_LIVE_MODE = False  # Change to True in production
+STRIPE_LIVE_MODE = config('STRIPE_LIVE_MODE', cast=bool) # False  # Change to True in production
 DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
 DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations

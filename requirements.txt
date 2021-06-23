@@ -4,4 +4,4 @@ django-crispy-forms
 python-decouple
 pdfminer.six
 dj-stripe
-psycopg2
+# psycopg2
