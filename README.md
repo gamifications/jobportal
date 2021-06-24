@@ -25,6 +25,7 @@
 4. Init database and runserver
 	```bash
 	./manage.py migrate
+	./manage.py djstripe_sync_plans_from_stripe
 	./manage.py loaddata datas.json
 	./manage.py runserver
 	```

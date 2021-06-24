@@ -194,11 +194,13 @@ LOGIN_REDIRECT_URL='/'
 LOGIN_URL = 'account_login'
 
 
-STRIPE_LIVE_PUBLIC_KEY =config('STRIPE_LIVE_PUBLIC_KEY')
-STRIPE_LIVE_SECRET_KEY =config('STRIPE_LIVE_SECRET_KEY')
+
 STRIPE_TEST_PUBLIC_KEY =config('STRIPE_TEST_PUBLIC_KEY')
 STRIPE_TEST_SECRET_KEY = config('STRIPE_TEST_SECRET_KEY')
 STRIPE_LIVE_MODE = config('STRIPE_LIVE_MODE', cast=bool) # False  # Change to True in production
+if STRIPE_LIVE_MODE:
+    STRIPE_LIVE_PUBLIC_KEY =config('STRIPE_LIVE_PUBLIC_KEY')
+    STRIPE_LIVE_SECRET_KEY =config('STRIPE_LIVE_SECRET_KEY')
 DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
 DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations

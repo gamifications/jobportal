@@ -14,7 +14,8 @@ def homepage(request):
 @login_required
 def checkout(request):
   products = Product.objects.all()
-  return render(request,"payments/checkout.html",{"products": products})
+  return render(request,"payments/checkout.html",{"products": products,
+    'pubkey':djstripe.settings.STRIPE_PUBLIC_KEY})
 
 @login_required
 def create_sub(request):
@@ -26,7 +27,6 @@ def create_sub(request):
 
       payment_method_obj = stripe.PaymentMethod.retrieve(payment_method)
       djstripe.models.PaymentMethod.sync_from_stripe_data(payment_method_obj)
-
 
       try:
           # This creates a new Customer and attaches the PaymentMethod in one API call.
@@ -49,11 +49,7 @@ def create_sub(request):
           # Subscribe the user to the subscription created
           subscription = stripe.Subscription.create(
               customer=customer.id,
-              items=[
-                  {
-                      "price": data["price_id"],
-                  },
-              ],
+              items=[{"price": data["price_id"]}],
               expand=["latest_invoice.payment_intent"]
           )
 
@@ -67,20 +63,21 @@ def create_sub(request):
           return JsonResponse({'error': (e.args[0])}, status =403)
   else:
     return HTTPresponse('requet method not allowed')
+
 def complete(request):
   return render(request, "payments/complete.html")
 
 
-def cancel(request):
-  if request.user.is_authenticated:
-    sub_id = request.user.subscription.id
+# def cancel(request):
+#   if request.user.is_authenticated:
+#     sub_id = request.user.subscription.id
 
-    stripe.api_key = djstripe.settings.STRIPE_SECRET_KEY
+#     stripe.api_key = djstripe.settings.STRIPE_SECRET_KEY
 
-    try:
-      stripe.Subscription.delete(sub_id)
-    except Exception as e:
-      return JsonResponse({'error': (e.args[0])}, status =403)
+#     try:
+#       stripe.Subscription.delete(sub_id)
+#     except Exception as e:
+#       return JsonResponse({'error': (e.args[0])}, status =403)
 
 
-  return redirect("job:list")
+#   return redirect("job:list")
