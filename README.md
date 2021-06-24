@@ -4,15 +4,22 @@
 ## Running the Project Locally
 
 1. First, clone the repository to your local machine and add `.env` file and `db.sqlite3` file:
-    ```bash
-    git clone https://github.com/gamifications/jobportal
-    cp .env.example .env
-    cp sample.sqlite3 db.sqlite3
-    ```
+	```bash
+	git clone https://github.com/gamifications/jobportal
+	cd jobportal
+	cp .env.example .env
+	cp sample.sqlite3 db.sqlite3
+	```
+
+1. Setup a test stripe account and update `STRIPE_TEST_PUBLIC_KEY` and  `STRIPE_TEST_SECRET_KEY` in `.env` file:
+
+	```
+	STRIPE_TEST_PUBLIC_KEY=pk_test_xxxxx
+	STRIPE_TEST_SECRET_KEY=sk_test_xxxxx
+	```
 
 2. Ideally, create a [virtualenv](https://docs.python-guide.org/dev/virtualenvs/):
 	```bash
-	cd jobportal
 	python3 -m venv env
 	source env/bin/activate
 	```
