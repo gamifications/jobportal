@@ -40,6 +40,7 @@
               {% url 'payments:home' as billings %}
               
               <ul class="nav nav-tabs card-header-tabs">
+                {% if user.subscription.status == "active" %}
                 <li class="nav-item">
                   <a class="nav-link{% if request.path == '/' %} active{% endif %}" href="{{ job_list }}"><i class="fa fa-home"></i> All Jobs</a>
                 </li>
@@ -47,6 +48,7 @@
                 <li class="nav-item">
                   <a class="nav-link{% if job_create in request.path %} active{% endif %}" href="{{ job_create }}"><i class="fa fa-plus"></i> Create Job</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link{% if billings in request.path %} active{% endif %}" href="{{ billings }}"><i class="fa fa-user"></i> Billings</a>
                 </li>
