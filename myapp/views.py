@@ -65,8 +65,8 @@ class JobView(LoginRequiredMixin, View):
             key1 = f'jobkeywords_set-{n}-keyword'
             key2 = f'jobkeywords_set-{n}-tags'
             if not post_data[key1].isdigit() and post_data[key1]:
-                # print('keyword:',key1, post_data[key1])
-                post_data.update({key1: str(Keyword.objects.get(name=post_data[key1]).pk)})
+                # if new keyword and error happens, create the keyword
+                post_data.update({key1: str(Keyword.objects.get_or_create(name=post_data[key1].title())[0].pk)})
 
             tags = []
             for item in post_data.getlist(key2):

@@ -11,9 +11,14 @@ class User(AbstractUser):
 
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])
+    name = models.CharField(max_length=300, unique=True) #, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(check=~models.Q(name=""), name="non_empty_name")
+        ]
 
 class Tag(models.Model):
     name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])

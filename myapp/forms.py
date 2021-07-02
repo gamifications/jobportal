@@ -98,7 +98,7 @@ class KeywordChoiceField(forms.ModelChoiceField):
         #     raise ValidationError('Keyword must startwith Character.', code='character')
 
         # create new keyword if not pk
-        return Keyword.objects.get_or_create(name=value.title())[0]
+        return Keyword.objects.get_or_create(name=value.title())[0] if value else None
         
 class TagsChoiceField(forms.ModelMultipleChoiceField):
     def _check_values(self, value):
@@ -125,7 +125,7 @@ class JobKeywordsForm(forms.ModelForm):
     """
     Bug: Django model validator not working(min_length=2)
     """
-    keyword = KeywordChoiceField(queryset=Keyword.objects.all())
+    keyword = KeywordChoiceField(queryset=Keyword.objects.all(), required=True)
     tags = TagsChoiceField(queryset=Tag.objects.all())
     class Meta:
         model = JobKeywords
