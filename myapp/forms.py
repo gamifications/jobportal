@@ -155,3 +155,16 @@ CandidateFormset = forms.inlineformset_factory(
     min_num=0,
     # validate_min=True,
 )
+
+from allauth.account.forms import SignupForm
+
+
+class CustomSignupForm(SignupForm):
+    company = forms.SlugField()
+    def save(self, request):
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super().save(request)
+        user.company = self.cleaned_data['company']
+        user.save()
+        return user
