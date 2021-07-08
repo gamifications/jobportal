@@ -1,0 +1,18 @@
+{% load hosts %}
+<a href="{% host_url 'applyjob' host 'wildcard' 'www' %}">Home</a>
+<a href="{% host_url 'applyjob' host 'wildcard' 'digitalocean' %}">Digital Ocean</a> |
+<a href="{% host_url 'applyjob' host 'wildcard' 'google' %}">Google</a> |
+<a href="{% host_url 'applyjob' host 'wildcard' 'microsoft' %}">Microsoft</a>
+<hr>
+<h1>{{company}}</h1>
+<a href="{% host_url 'viewjob' host 'wildcard' company %}">View Job</a><br>
+
+{% if company == 'digitalocean' %}
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/DigitalOcean_logo.svg" alt="" width="400">
+{% elif company == 'google' %}
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png" alt="" width="400">
+{% elif company == 'microsoft' %}
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="" width="400">
+{% endif %}
+
+

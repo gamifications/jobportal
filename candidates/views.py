@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def applyjob(request):
+    return render(request,'apply_job.html',{'company': request.get_host().split('.')[0]})

@@ -42,11 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'myapp',
     'payments',
+    'candidates',
 
     'crispy_forms',
     "djstripe",
     'allauth',
     'allauth.account',
+    'django_hosts',
 
 ]
 
@@ -59,6 +61,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -204,3 +208,9 @@ if STRIPE_LIVE_MODE:
 DJSTRIPE_WEBHOOK_SECRET = "whsec_xxx"  # Get it from the section in the Stripe dashboard where you added the webhook endpoint
 DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"  # Set to `"id"` for all new 2.4+ installations
+
+
+ROOT_HOSTCONF = 'mysite.hosts'  # Change `mysite` to the name of your project
+DEFAULT_HOST = 'www'  # Name 
+
+PARENT_HOST = config('PARENT_HOST')
