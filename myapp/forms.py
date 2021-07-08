@@ -157,10 +157,16 @@ CandidateFormset = forms.inlineformset_factory(
 )
 
 from allauth.account.forms import SignupForm
-
+from django.contrib.auth import get_user_model
 
 class CustomSignupForm(SignupForm):
     company = forms.SlugField()
+
+    def clean_company(self):
+        company = self.cleaned_data['company'].lower()
+        if get_user_model().objects.filter(company=company):
+            raise ValidationError("company already exists")
+        return company
     def save(self, request):
         # Ensure you call the parent class's save.
         # .save() returns a User object.
