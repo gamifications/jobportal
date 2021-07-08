@@ -151,7 +151,7 @@ CandidateFormset = forms.inlineformset_factory(
     Job,
     Candidate,
     form=CandidateForm,
-    extra=0,
-    min_num=1,
-    validate_min=True,
+    extra=1,
+    min_num=0,
+    # validate_min=True,
 )
