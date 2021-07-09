@@ -1,18 +1,43 @@
+{% extends 'base.html' %}
 {% load hosts %}
-<a href="{% host_url 'applyjob' host 'wildcard' 'www' %}">Home</a>
-<a href="{% host_url 'applyjob' host 'wildcard' 'digitalocean' %}">Digital Ocean</a> |
-<a href="{% host_url 'applyjob' host 'wildcard' 'google' %}">Google</a> |
-<a href="{% host_url 'applyjob' host 'wildcard' 'microsoft' %}">Microsoft</a>
-<hr>
-<h1>{{company}}</h1>
-<a href="{% host_url 'viewjob' host 'wildcard' company %}">View Job</a><br>
+{% load crispy_forms_tags crispy_forms_filters %}
 
-{% if company == 'digitalocean' %}
-<img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/DigitalOcean_logo.svg" alt="" width="400">
-{% elif company == 'google' %}
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png" alt="" width="400">
-{% elif company == 'microsoft' %}
-<img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="" width="400">
-{% endif %}
+{% block body %}
+{% include 'company/_header.html' %}
 
 
+<div class="card mb-3">
+<div class="card-header">
+  <ul class="nav nav-tabs card-header-tabs">
+    <li class="nav-item">
+      <a class="nav-link" href="{% host_url 'company' host 'wildcard' company %}"><i class="fa fa-home"></i> All Jobs</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#apply_job"><i class="fa fa-plus"></i> Apply Job</a>
+    </li>
+  </ul>
+</div>
+<div class="card-body">
+  {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+    </div>
+  {% endfor %}
+
+  {% include 'myapp/_job.html' %}
+  <hr>
+  <div class="card" id="apply_job">
+	<div class="card-header">
+		Apply Job
+	</div>
+	<div class="card-body">
+		<form method="post" enctype="multipart/form-data">
+      {{ form.job.as_hidden }}
+		  {% crispy form %}
+		  <button class="btn btn-success float-right" type="submit"> Apply</button>
+		</form>	
+	</div>
+  </div>
+</div>
+</div>
+{% endblock %}
