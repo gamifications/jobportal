@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'payments',
     'company',
 
+    'ajax_datatable', # https://github.com/morlandi/django-ajax-datatable
     'crispy_forms',
     "djstripe",
     'allauth',

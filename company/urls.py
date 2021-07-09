@@ -7,6 +7,7 @@ from . import views
 
 urlpatterns = [
 	path('', TemplateView.as_view(template_name="company/company.html"), name='company'),
+	path('ajax_datatable/jobs/', views.JobsAjaxDatatableView.as_view(), name="ajax_datatable_jobs"),
     path('applyjob/', views.applyjob, name='applyjob'),
 
     # redirect urls such http://microsoft.localhost:8000/account/login/?next=/payment/ 
