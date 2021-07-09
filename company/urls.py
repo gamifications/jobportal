@@ -6,10 +6,10 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
-    path('', views.applyjob, name='applyjob'),
-    path('viewjob/', TemplateView.as_view(template_name="view_job.html"), name='viewjob'),
+	path('', TemplateView.as_view(template_name="company/company.html"), name='company'),
+    path('applyjob/', views.applyjob, name='applyjob'),
 
     # redirect urls such http://microsoft.localhost:8000/account/login/?next=/payment/ 
     # to http://microsoft.localhost:8000/
-    url(r'^.*', RedirectView.as_view(pattern_name='applyjob', permanent=False)),
+    url(r'^.*', RedirectView.as_view(pattern_name='company', permanent=False)),
 ]

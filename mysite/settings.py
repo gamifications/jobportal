@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'myapp',
     'payments',
-    'candidates',
+    'company',
 
     'crispy_forms',
     "djstripe",
