@@ -16,17 +16,14 @@ def companyview(request):
         raise Http404("Access Denied")
     return render(request,'company/company.html',{'company': company})
 
-# def applyjob(request,pk):
-#     company = get_company(request.get_host())
-#     job = Job.objects.filter(created_by__company=company, id=pk).first()
-#     if not job:
-#         # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
-#         raise Http404("Access Denied")
-
-#     return render(request,'company/apply_job.html',{'company': company, 
-#         'form':CandidateForm(),'job': job, 
-#         'jobkeywords': JobKeywords.objects.filter(job=job)})
-
+def jobdetails(request,pk):
+    company = get_company(request.get_host())
+    job = Job.objects.filter(created_by__company=company, id=pk).first()
+    if not job:
+        # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
+        raise Http404("Access Denied")
+    return render(request,'company/job.html',{'company': company, 'job': job, 
+        'jobkeywords': JobKeywords.objects.filter(job=job)})
 
 def applyjob(request,pk):
     company = get_company(request.get_host())
@@ -43,8 +40,8 @@ def applyjob(request,pk):
             candidate = form.save(commit=False)
             candidate.job = job
             candidate.save()
-            messages.success(request, 'Job saved with success!')
-            return redirect(f'/apply/{job.pk}/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
+            messages.success(request, 'Job submitted successfully!')
+            return redirect(f'/job/{job.pk}/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
             #)
         else:
             print('form errr')
@@ -53,8 +50,7 @@ def applyjob(request,pk):
         form = CandidateForm(instance=cand)
 
     return render(request,'company/apply_job.html',{'company': company, 
-        'form':form,'job': job, 
-        'jobkeywords': JobKeywords.objects.filter(job=job)})
+        'form':form,'job': job})
 
 
 
@@ -86,7 +82,7 @@ class JobsAjaxDatatableView(AjaxDatatableView):
         # https://github.com/morlandi/django-ajax-datatable#id42
         row['apply'] = """
             <a style="cursor:pointer" onclick="const id=this.closest('tr').id.substr(4);
-                window.location.replace('/apply/'+id+'/');">
+                window.location.replace('/job/'+id+'/');">
                Apply Job
             </a>
         """

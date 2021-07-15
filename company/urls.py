@@ -8,6 +8,8 @@ app_name = 'company'
 urlpatterns = [
 	path('', views.companyview, name='company'), #TemplateView.as_view(template_name="company/company.html"), name='company'),
 	path('ajax_datatable/jobs/', views.JobsAjaxDatatableView.as_view(), name="ajax_datatable_jobs"),
+    path('job/<int:pk>/', views.jobdetails, name='job'),
+
     path('apply/<int:pk>/', views.applyjob, name='applyjob'),
 
     # redirect urls such http://microsoft.localhost:8000/account/login/?next=/payment/ 
