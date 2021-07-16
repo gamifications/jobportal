@@ -6,18 +6,20 @@
 
 {% block body %}
 {% include 'company/_header.html' %}
+
 <div class="card mb-3">
 <div class="card-header">
   <ul class="nav nav-tabs card-header-tabs">
     <li class="nav-item">
       <a class="nav-link" href="{% host_url 'company' host 'wildcard' company %}"><i class="fa fa-home"></i> All Jobs</a>
     </li>
-    <li class="nav-item active">
-      <a class="nav-link" href="#" href="#apply_job"><i class="fa fa-plus"></i> Apply Job</a>
+    <li class="nav-item">
+      <a class="nav-link active" href="#"><i class="fa fa-plus"></i> Apply Job</a>
     </li>
   </ul>
 </div>
 <div class="card-body">
+  <h3>{{job.title}}</h3><hr>
 	<form method="post" enctype="multipart/form-data">
   {{ form.job.as_hidden }}
 	  {% crispy form %}

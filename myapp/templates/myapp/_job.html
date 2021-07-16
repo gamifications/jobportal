@@ -9,7 +9,7 @@
 
 <div class="alert alert-info" role="alert">
   <strong>Description:</strong>
-  <p>{{job.description}}</p>
+  <p>{{job.description|safe}}</p>
 </div>
 <div class="row">
   <div class="col-md-6">
@@ -49,7 +49,7 @@
     </div>
   </div>
 </div>
-
+{% if jobkeywords %}
 <div class="row">
   <div class="col-md-8">
     <div class="card mt-3">
@@ -67,3 +67,4 @@
     </div>
   </div>
 </div>
+{% endif %}

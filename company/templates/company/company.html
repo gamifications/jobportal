@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+<!-- <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" /> -->
 <link rel="stylesheet" type="text/css" href="{% static 'datatables/dataTables.bootstrap4.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'datatables/responsive.bootstrap4.min.css' %}">
 
@@ -28,12 +28,14 @@
 <script type="text/javascript">
 $(document).ready(function() {
     AjaxDatatableViewUtils.initialize_table($('#datatable_jobs'), "{% url 'ajax_datatable_jobs' %}",
-      { processing: false, autoWidth: false, full_row_select: true, scrollX: false },
+      { processing: false, autoWidth: false, full_row_select: false, scrollX: false },
       { company: '{{request.get_host}}',}
     );
-    $( "#datatable_jobs" ).on( "click", "a.plus", function(e) {
-      console.log( $( this ).text() );
-    });
+
+    function preventClick( event ) { event.preventDefault() }
+    // prevent going to top while + and - click
+    $("#datatable_jobs").on( "click", "a.plus", preventClick ); 
+    $("#datatable_jobs").on( "click", "a.minus", preventClick ); 
 });
 </script>
 {% endblock %}

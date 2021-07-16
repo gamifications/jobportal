@@ -22,8 +22,7 @@ def jobdetails(request,pk):
     if not job:
         # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
         raise Http404("Access Denied")
-    return render(request,'company/job.html',{'company': company, 'job': job, 
-        'jobkeywords': JobKeywords.objects.filter(job=job)})
+    return render(request,'company/job.html',{'company': company, 'job': job})
 
 def applyjob(request,pk):
     company = get_company(request.get_host())
@@ -63,8 +62,8 @@ class JobsAjaxDatatableView(AjaxDatatableView):
         {'name': 'id', 'visible': False, },
         {'name': 'title', 'visible': True },
         {'name': 'department', 'visible': True, },
-        {'name': 'apply', 'title': 'Apply Now', 'searchable': False, 'orderable': False, },
         {'name': 'category', 'visible': True},  
+        {'name': 'apply', 'title': 'Apply Now', 'searchable': False, 'orderable': False, },
         {'name': 'description', 'visible': False, },
         # {'name': 'app_label', 'foreign_field': 'content_type__app_label', 'visible': True, },
     ]
@@ -80,9 +79,6 @@ class JobsAjaxDatatableView(AjaxDatatableView):
 
     def customize_row(self, row, obj):
         # https://github.com/morlandi/django-ajax-datatable#id42
-        row['apply'] = """
-            <a style="cursor:pointer" onclick="const id=this.closest('tr').id.substr(4);
-                window.location.replace('/job/'+id+'/');">
-               Apply Job
-            </a>
+        row['apply'] = f"""
+        <a class='btn btn-success btn-sm' href='/job/{obj.id}/'>Apply Job</a>
         """
