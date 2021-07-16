@@ -31,6 +31,9 @@ $(document).ready(function() {
       { processing: false, autoWidth: false, full_row_select: true, scrollX: false },
       { company: '{{request.get_host}}',}
     );
+    $( "#datatable_jobs" ).on( "click", "a.plus", function(e) {
+      console.log( $( this ).text() );
+    });
 });
 </script>
 {% endblock %}
