@@ -62,10 +62,10 @@ class JobsAjaxDatatableView(AjaxDatatableView):
         AjaxDatatableView.render_row_tools_column_def(),
         {'name': 'id', 'visible': False, },
         {'name': 'title', 'visible': True },
-        {'name': 'description', 'visible': True, },
         {'name': 'department', 'visible': True, },
         {'name': 'apply', 'title': 'Apply Now', 'searchable': False, 'orderable': False, },
-        {'name': 'category', 'visible': False},  
+        {'name': 'category', 'visible': True},  
+        {'name': 'description', 'visible': False, },
         # {'name': 'app_label', 'foreign_field': 'content_type__app_label', 'visible': True, },
     ]
 

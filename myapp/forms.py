@@ -12,12 +12,13 @@ class JobForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            # 'title',
-            Row(
-                Column('title', css_class='form-group col-md-4 mb-0'),
-                Column('description', css_class='form-group col-md-8 mb-0'),
-                css_class='form-row'
-            ),     
+            'title',
+            'description',
+            # Row(
+            #     Column('title', css_class='form-group col-md-4 mb-0'),
+            #     Column('description', css_class='form-group col-md-8 mb-0'),
+            #     css_class='form-row'
+            # ),     
             Row(
                 Column('department', css_class='form-group col-md-6 mb-0'),
                 Column('category', css_class='form-group col-md-6 mb-0'),
