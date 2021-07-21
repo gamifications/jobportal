@@ -1,8 +1,9 @@
+
 <div class="list-group">
-  <button type="button" class="list-group-item list-group-item-action" disabled><strong>Account settings</strong></button>
-  <button type="button" class="list-group-item list-group-item-action{% if active == 'profile' %} active{% endif %}">Profile</button>
-  <button type="button" class="list-group-item list-group-item-action{% if active == 'billing' %} active{% endif %}" aria-current="true">
-    Billing & plans
-  </button>
-  <button type="button" class="list-group-item list-group-item-action{% if active == 'company' %} active{% endif %}">Company</button>
+  <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true"><strong>Account settings</strong></a>
+  <a href="{% url 'job:profile'%}" class="list-group-item list-group-item-action{% if active == 'profile' %} list-group-item-dark{% endif %}">Profile
+  </a>
+  <a href="{% url 'job:billing' %}" class="list-group-item list-group-item-action{% if active == 'billing' %} list-group-item-dark{% endif %}" aria-current="true">
+    Billing & plans</a>
+  <a href="{% url 'job:company' %}" class="list-group-item list-group-item-action{% if active == 'company' %} list-group-item-dark{% endif %}">Company</a>
 </div>

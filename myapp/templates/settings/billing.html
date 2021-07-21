@@ -2,10 +2,9 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-3">{% include 'settings/_nav.html' %}</div>
+  <div class="col-3">{% include 'settings/_nav.html'  with active='billing' %}</div>
   <div class="col-9">
-    <p class="lead">Hai: {{user.first_name}} {{user.last_name}} ({{user.username}})</p>
-    <hr>
+    
     <h4>Your subscription:</h4>
     {% if subscription.status == "active" %}
       <div class="card" style="width: 18rem;">
@@ -17,8 +16,11 @@
         </div>
       </div>
     {% else %}
-      <div class="alert alert-danger">No Subscription</div>
-      <a href="{% url 'payments:checkout' %}" class="btn btn-success">Subscribe New Plan</a>
+      <div class="alert alert-danger"><strong>No Subscription.</strong> Please subscribe a plan to post jobs.</div>
+
+      <hr>
+      
+      <a class="btn btn-success btn-lg pull-right" href="{% url 'payments:checkout' %}">Subscribe New Plan</a>
     {% endif %}
   </div>
 </div>

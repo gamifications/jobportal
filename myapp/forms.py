@@ -5,7 +5,7 @@ from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 
-from .models import Job, Candidate, JobKeywords, Keyword, Tag
+from .models import Job, Candidate, JobKeywords, Keyword, Tag, Company
 
 class JobForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -160,18 +160,31 @@ CandidateFormset = forms.inlineformset_factory(
 from allauth.account.forms import SignupForm
 from django.contrib.auth import get_user_model
 
+
+def validate_company_slug(slug, company=None):
+    if not re.match('[a-z0-9]{3,20}$',slug):
+        return 'Company Slug must be 3-20 characters long, contain only letters and numbers.'
+
+    if company and slug == company.slug:
+        # if slug doesn't changed while editing
+        return 'success'
+
+    if Company.objects.filter(slug=slug):
+        return 'Company Slug already exists.'
+    return 'success'
+
+
 class CustomSignupForm(SignupForm):
     company = forms.SlugField()
 
     def clean_company(self):
         company = self.cleaned_data['company'].lower()
-        if get_user_model().objects.filter(company=company):
-            raise ValidationError("company already exists")
-        return company
+        msg = validate_company_slug(company)
+        if msg == 'success':
+            return company
+        raise ValidationError(msg)
+        
     def save(self, request):
-        # Ensure you call the parent class's save.
-        # .save() returns a User object.
         user = super().save(request)
-        user.company = self.cleaned_data['company']
-        user.save()
+        Company.objects.create(slug=company, user=user)
         return user

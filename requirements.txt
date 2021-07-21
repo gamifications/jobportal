@@ -7,4 +7,5 @@ pdfminer.six==20201018
 django-ckeditor
 django-hosts
 django-ajax-datatable
+Pillow
 # psycopg2

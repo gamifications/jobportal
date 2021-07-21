@@ -4,7 +4,7 @@ from django.http import Http404
 from django.contrib import messages
 from django_hosts.resolvers import reverse
 
-from myapp.models import Job, JobKeywords, Candidate
+from myapp.models import Job, JobKeywords, Candidate, Company
 from myapp.forms import CandidateForm
 
 get_company = lambda r: r.split('.')[0]
@@ -12,38 +12,35 @@ get_company = lambda r: r.split('.')[0]
 
 def companyview(request):
     company = get_company(request.get_host())
-    if not Job.objects.filter(created_by__company=company):
-        raise Http404("Access Denied")
+    if not Company.objects.filter(slug=company):
+        raise Http404("Company Doesn't Exist")
     return render(request,'company/company.html',{'company': company})
 
 def jobdetails(request,pk):
     company = get_company(request.get_host())
-    job = Job.objects.filter(created_by__company=company, id=pk).first()
+    job = Job.objects.filter(created_by__company__slug=company, id=pk).first()
     if not job:
         # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
-        raise Http404("Access Denied")
+        raise Http404("Job Doesn't Exist")
     return render(request,'company/job.html',{'company': company, 'job': job})
 
 def applyjob(request,pk):
     company = get_company(request.get_host())
-    job = Job.objects.filter(created_by__company=company, id=pk).first()
+    job = Job.objects.filter(created_by__company__slug=company, id=pk).first()
     if not job:
         # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
-        raise Http404("Access Denied")
+        raise Http404("Job Doesn't Exist")
 
     if request.method == 'POST':
 
         form = CandidateForm(request.POST,request.FILES)
         if form.is_valid():
-            print('form save')
             candidate = form.save(commit=False)
             candidate.job = job
             candidate.save()
             messages.success(request, 'Job submitted successfully!')
             return redirect(f'/job/{job.pk}/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
-            #)
-        else:
-            print('form errr')
+            
     else:
         cand = Candidate(job = job)
         form = CandidateForm(instance=cand)
@@ -72,7 +69,7 @@ class JobsAjaxDatatableView(AjaxDatatableView):
         queryset = self.model.objects.all()
         if 'company' in request.REQUEST:
             company = get_company(request.REQUEST.get('company'))
-            queryset = queryset.filter(created_by__company=company)
+            queryset = queryset.filter(created_by__company__slug=company)
         
         return queryset
 

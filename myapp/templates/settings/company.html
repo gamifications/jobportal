@@ -2,9 +2,95 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-3">{% include 'settings/_nav.html' %}</div>
+  <div class="col-3">{% include 'settings/_nav.html'  with active='company' %}</div>
   <div class="col-9">
-    <h1>Company</h1>
+    
+    <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      <div class="row">
+        <div class="col-md-8">
+          <div class="form-group row">
+            <label for="slug" class="col-4 col-form-label">Company Slug</label> 
+            <div class="col-8">
+              <input value="{{user.company.slug}}" name="slug" placeholder="Slug" class="form-control">
+              <small class="form-text text-muted">
+                Slug will be used as Subdomain. It must be 3-20 characters long, contain only letters and numbers.
+              </small>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="name" class="col-4 col-form-label">Name</label> 
+            <div class="col-8">
+              <input value="{{user.company.name}}" name="name" placeholder="Name" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="description" class="col-4 col-form-label">Description</label> 
+            <div class="col-8">
+              <textarea name="description" placeholder="Description" class="form-control">{{user.company.description}}</textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label><strong>Company Logo</strong></label>
+          <img class="img-thumbnail" src="{% if user.company.logo %}{{user.company.logo.url}}{%else%}data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=={% endif %}"  width="150" height="200" alt="@{{ user.email}}">
+          <p>{% if user.company.logo %}{{user.company.logo}}{%else%}No Logo{% endif %}</p>
+          <label class="btn btn-info btn-block" for="my-file-selector">
+            <input id="my-file-selector" type="file" name='logo' style="display:none;">
+            Browse new logo
+          </label>
+        </div>
+      </div>    
+      <hr>
+      
+      <button name="submit" type="submit" class="btn btn-success btn-lg pull-right"><i class='fa fa-save'> Update Company</i></button>
+    </form>
   </div>
 </div>
 {% endblock %}
+
+<form method="post" enctype="multipart/form-data">{% csrf_token %}
+    <input type="hidden" name="user" value="{{user.id}}">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group row">
+          <label for="username" class="col-4 col-form-label">User Name</label> 
+          <div class="col-8">
+            <input name="username" placeholder="Username" class="form-control" value="{{user.username}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="name" class="col-4 col-form-label">First Name</label> 
+          <div class="col-8">
+            <input value="{{user.first_name}}" name="first_name" placeholder="First Name" class="form-control">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="lastname" class="col-4 col-form-label">Last Name</label> 
+          <div class="col-8">
+            <input value="{{user.last_name}}" name="last_name" placeholder="Last Name" class="form-control">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="text" class="col-4 col-form-label">Email</label> 
+          <div class="col-8">
+            <input value="{{user.email}}" name="email" placeholder="Email" class="form-control">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="offset-4 col-8">
+            <button name="submit" type="submit" class="btn btn-success">Update Profile</button>
+          </div>
+        </div>
+        
+      </div>
+      <div class="col-md-4">
+        <label><strong>Profile picture</strong></label>
+        <img class="img-thumbnail" src="{{ user.email|gravatar_url:200 }}" width="200" height="200" alt="@{{ user.email}}">
+        <!-- <br><br>
+        <label class="btn btn-info" for="my-file-selector">
+          <input id="my-file-selector" type="file" style="display:none;">
+          Uploade new picture
+        </label> -->
+      </div>
+    </div>    
+  </form>

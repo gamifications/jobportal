@@ -10,7 +10,13 @@ from ckeditor.fields import RichTextField
 class User(AbstractUser):
     customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
     subscription = models.ForeignKey(Subscription, null=True, blank=True,on_delete=models.SET_NULL)
-    company = models.SlugField(unique=True, null=True)
+
+class Company(models.Model):  
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=500)
+    description = models.TextField(default='')
+    logo = models.ImageField(blank=True, null=True)
 
 
 class Keyword(models.Model):

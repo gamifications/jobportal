@@ -18,7 +18,7 @@ class SubscriptionRequiredMixin(UserPassesTestMixin):
         return self.request.user.is_authenticated and self.request.user.subscription and self.request.user.subscription.status == "active"
 
     def handle_no_permission(self):
-        return redirect('payments:home')
+        return redirect('job:billing')
 
 class JobListView(SubscriptionRequiredMixin, generic.list.ListView):
     """Return list of all jobs"""
