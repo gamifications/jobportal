@@ -38,7 +38,7 @@
               {% url 'job:list' as job_list %}
               {% url 'job:edit' as job_edit %}
               {% url 'job:create' as job_create %}
-              {% url 'payments:home' as billings %}
+              {% url 'job:profile' as settings %}
               
               <ul class="nav nav-tabs card-header-tabs">
                 {% if user.subscription.status == "active" %}
@@ -51,7 +51,7 @@
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                  <a class="nav-link{% if billings in request.path %} active{% endif %}" href="{{ billings }}"><i class="fa fa-user"></i> Billings</a>
+                  <a class="nav-link{% if settings in request.path %} active{% endif %}" href="{{ settings }}"><i class="fa fa-user"></i> Settings</a>
                 </li>
                 
               </ul>

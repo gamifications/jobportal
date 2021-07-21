@@ -4,7 +4,7 @@ from . import views
 app_name = "payments"   
 
 urlpatterns = [
-  path("", views.homepage, name="home"),
+  # path("", views.homepage, name="home"),
   path("checkout/", views.checkout, name="checkout"),
   path("create-sub/", views.create_sub, name="create-sub"), #add
   path("complete/", views.complete, name="complete"), #add

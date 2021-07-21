@@ -7,9 +7,6 @@ from django.contrib.auth.decorators import login_required
 import djstripe
 from django.http import HttpResponse
 
-@login_required
-def homepage(request):
-  return render(request, "payments/home.html",{'subscription':request.user.subscription})
 
 @login_required
 def checkout(request):
