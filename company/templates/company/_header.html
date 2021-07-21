@@ -1,7 +1,8 @@
+{% load hosts %}
 <div class="jumbotron">
   <h1 class="display-4">{{company|title}}!</h1>
   <p class="lead">LIVE ENERGIZED.</p>
   <hr class="my-4">
   <p>Join {{company}} the most energizing community for Python Developers and get long-term remote jobs with leading brands.</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">JOIN {{company|upper}}</a>
+  <a class="btn btn-primary btn-lg" href="{% host_url 'company' host 'wildcard' company %}" role="button">JOIN {{company|upper}}</a>
 </div>
