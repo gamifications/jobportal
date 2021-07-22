@@ -186,5 +186,5 @@ class CustomSignupForm(SignupForm):
         
     def save(self, request):
         user = super().save(request)
-        Company.objects.create(slug=company, user=user)
+        Company.objects.create(slug=self.cleaned_data['company'], user=user)
         return user
