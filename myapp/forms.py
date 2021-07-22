@@ -5,19 +5,20 @@ from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 
-from .models import Job, Candidate, JobKeywords, Keyword, Tag
+from .models import Job, Candidate, JobKeywords, Keyword, Tag, Company
 
 class JobForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            # 'title',
-            Row(
-                Column('title', css_class='form-group col-md-4 mb-0'),
-                Column('description', css_class='form-group col-md-8 mb-0'),
-                css_class='form-row'
-            ),     
+            'title',
+            'description',
+            # Row(
+            #     Column('title', css_class='form-group col-md-4 mb-0'),
+            #     Column('description', css_class='form-group col-md-8 mb-0'),
+            #     css_class='form-row'
+            # ),     
             Row(
                 Column('department', css_class='form-group col-md-6 mb-0'),
                 Column('category', css_class='form-group col-md-6 mb-0'),
@@ -98,7 +99,7 @@ class KeywordChoiceField(forms.ModelChoiceField):
         #     raise ValidationError('Keyword must startwith Character.', code='character')
 
         # create new keyword if not pk
-        return Keyword.objects.get_or_create(name=value.title())[0]
+        return Keyword.objects.get_or_create(name=value.title())[0] if value else None
         
 class TagsChoiceField(forms.ModelMultipleChoiceField):
     def _check_values(self, value):
@@ -125,7 +126,7 @@ class JobKeywordsForm(forms.ModelForm):
     """
     Bug: Django model validator not working(min_length=2)
     """
-    keyword = KeywordChoiceField(queryset=Keyword.objects.all())
+    keyword = KeywordChoiceField(queryset=Keyword.objects.all(), required=True)
     tags = TagsChoiceField(queryset=Tag.objects.all())
     class Meta:
         model = JobKeywords
@@ -151,7 +152,39 @@ CandidateFormset = forms.inlineformset_factory(
     Job,
     Candidate,
     form=CandidateForm,
-    extra=0,
-    min_num=1,
-    validate_min=True,
+    extra=1,
+    min_num=0,
+    # validate_min=True,
 )
+
+from allauth.account.forms import SignupForm
+from django.contrib.auth import get_user_model
+
+
+def validate_company_slug(slug, company=None):
+    if not re.match('[a-z0-9]{3,20}$',slug):
+        return 'Company Slug must be 3-20 characters long, contain only letters and numbers.'
+
+    if company and slug == company.slug:
+        # if slug doesn't changed while editing
+        return 'success'
+
+    if Company.objects.filter(slug=slug):
+        return 'Company Slug already exists.'
+    return 'success'
+
+
+class CustomSignupForm(SignupForm):
+    company = forms.SlugField()
+
+    def clean_company(self):
+        company = self.cleaned_data['company'].lower()
+        msg = validate_company_slug(company)
+        if msg == 'success':
+            return company
+        raise ValidationError(msg)
+        
+    def save(self, request):
+        user = super().save(request)
+        Company.objects.create(slug=self.cleaned_data['company'], user=user)
+        return user

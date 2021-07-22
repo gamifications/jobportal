@@ -1,9 +1,13 @@
-django
-django-allauth
-django-crispy-forms
-python-decouple
-pdfminer.six
-dj-stripe
+dj-stripe==2.5.0
+Django==3.2.4
+django-allauth==0.44.0
+django-crispy-forms==1.12.0
+python-decouple==3.4
+pdfminer.six==20201018
+django-ckeditor
+django-hosts
+django-ajax-datatable
+Pillow
 psycopg2
 
 gunicorn

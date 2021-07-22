@@ -1,0 +1,31 @@
+
+
+{% extends 'base.html' %}
+{% load hosts %}
+{% load crispy_forms_tags crispy_forms_filters %}
+
+{% block body %}
+{% include 'company/_header.html' %}
+
+<div class="card mb-3">
+<div class="card-header">
+  <ul class="nav nav-tabs card-header-tabs">
+    <li class="nav-item">
+      <a class="nav-link" href="{% host_url 'company' host 'wildcard' company %}"><i class="fa fa-home"></i> All Jobs</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="#"><i class="fa fa-plus"></i> Apply Job</a>
+    </li>
+  </ul>
+</div>
+<div class="card-body">
+  <h3>{{job.title}}</h3><hr>
+	<form method="post" enctype="multipart/form-data">
+  {{ form.job.as_hidden }}
+	  {% crispy form %}
+	  <button class="btn btn-success float-right" type="submit"> Submit application</button>
+	</form>	
+</div>
+</div>
+{% endblock %}
+

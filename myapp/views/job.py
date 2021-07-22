@@ -10,8 +10,17 @@ from myapp.models import Job, Keyword, Candidate, JobKeywords, Tag
 from myapp.forms import JobForm, CandidateFormset, KeywordFormset
 
 
+from django.contrib.auth.mixins import UserPassesTestMixin
 
-class JobListView(LoginRequiredMixin, generic.list.ListView):
+
+class SubscriptionRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.subscription and self.request.user.subscription.status == "active"
+
+    def handle_no_permission(self):
+        return redirect('job:billing')
+
+class JobListView(SubscriptionRequiredMixin, generic.list.ListView):
     """Return list of all jobs"""
     def get_queryset(self):
         return Job.objects.filter(created_by=self.request.user)
@@ -26,7 +35,7 @@ class JobView(LoginRequiredMixin, View):
         from pdfminer.high_level import extract_text
         candidates = Candidate.objects.filter(job=job,resume__isnull=False)
         for candidate in candidates:
-            if not candidate.resume_data:
+            if not candidate.resume_data and candidate.resume:
                 candidate.resume_data = extract_text(candidate.resume.path)
                 candidate.save()
 
@@ -56,8 +65,8 @@ class JobView(LoginRequiredMixin, View):
             key1 = f'jobkeywords_set-{n}-keyword'
             key2 = f'jobkeywords_set-{n}-tags'
             if not post_data[key1].isdigit() and post_data[key1]:
-                # print('keyword:',key1, post_data[key1])
-                post_data.update({key1: str(Keyword.objects.get(name=post_data[key1]).pk)})
+                # if new keyword and error happens, create the keyword
+                post_data.update({key1: str(Keyword.objects.get_or_create(name=post_data[key1].title())[0].pk)})
 
             tags = []
             for item in post_data.getlist(key2):

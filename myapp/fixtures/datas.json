@@ -1,0 +1,150 @@
+[{
+    "model": "myapp.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$TVIGK9uUAQfs89mXbR9DiT$hQrnIV9U28fznpZfPB7O2gvzFU4h1XvSdCOs2Y/5uP8=",
+        "last_login": "2021-06-23T23:03:13.793Z",
+        "is_superuser": false,
+        "username": "test",
+        "first_name": "",
+        "last_name": "",
+        "email": "test@test.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2021-06-23T23:03:13.105Z",
+        "customer": null,
+        "subscription": null,
+        "groups": [],
+        "user_permissions": []
+    }
+}, {
+    "model": "myapp.keyword",
+    "pk": 1,
+    "fields": {
+        "name": "Web Development"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 1,
+    "fields": {
+        "name": "javascript"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 2,
+    "fields": {
+        "name": "react"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 3,
+    "fields": {
+        "name": "typescript"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 4,
+    "fields": {
+        "name": "jest"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 5,
+    "fields": {
+        "name": "webpack"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 6,
+    "fields": {
+        "name": "front end design"
+    }
+}, {
+    "model": "myapp.tag",
+    "pk": 7,
+    "fields": {
+        "name": "html5"
+    }
+}, {
+    "model": "myapp.candidate",
+    "pk": 1,
+    "fields": {
+        "job": 1,
+        "name": "Mario Speedwagon",
+        "email": "bechtelar.elvie@quigley.com",
+        "jobtitle": "Frontend Dev",
+        "salary": 20000,
+        "resume": "",
+        "resume_data": "4+ years of experience developing production JavaScript code and working with a modern framework like React\r\n6+ years professional software experience\r\nDeep understanding of JavaScript language, including ES6+ syntax and Typescript superset\r\nUnderstanding of state-management patterns such as Redux\r\nFamiliarity with product and design life-cycles, collaborating closely with product managers, designers, and engineers\r\nExperience developing responsive web sites\r\nExperience with REST and WebSocket based services\r\nStrong collaboration and communication skills"
+    }
+}, {
+    "model": "myapp.candidate",
+    "pk": 2,
+    "fields": {
+        "job": 1,
+        "name": "Petey Cruiser",
+        "email": "rutherford.citlalli@hintz.net",
+        "jobtitle": "Marketing manager",
+        "salary": 16000,
+        "resume": "",
+        "resume_data": ""
+    }
+}, {
+    "model": "myapp.candidate",
+    "pk": 3,
+    "fields": {
+        "job": 1,
+        "name": "Anna Sthesia",
+        "email": "schimmel@yahoo.com",
+        "jobtitle": "Team Leader",
+        "salary": 22000,
+        "resume": "",
+        "resume_data": ""
+    }
+}, {
+    "model": "myapp.candidate",
+    "pk": 4,
+    "fields": {
+        "job": 1,
+        "name": "Paul Molive",
+        "email": "waltonprice@fritsch.org",
+        "jobtitle": "Backend Dev",
+        "salary": 14000,
+        "resume": "",
+        "resume_data": ""
+    }
+}, {
+    "model": "myapp.job",
+    "pk": 1,
+    "fields": {
+        "title": "Senior Frontend Engineer",
+        "description": "Senior Frontend Engineer to join our new team for a censorship-resistant cryptocurrency exchange.",
+        "department": "Manager",
+        "category": "Frontend Developer",
+        "salary_low": 20000,
+        "salary_high": 50000,
+        "start_date": "2021-06-01",
+        "closing_date": "2021-06-30",
+        "reporting_line": "Brave New Software",
+        "stage": "draft",
+        "created_by": 1,
+        "created_at": "2021-06-23T23:11:38.104Z"
+    }
+}, {
+    "model": "myapp.jobkeywords",
+    "pk": 1,
+    "fields": {
+        "job": 1,
+        "keyword": 1,
+        "tags": [1, 2, 3, 4, 5, 6, 7]
+    }
+}, {
+    "model": "account.emailaddress",
+    "pk": 1,
+    "fields": {
+        "user": 1,
+        "email": "test@test.com",
+        "verified": false,
+        "primary": true
+    }
+}]

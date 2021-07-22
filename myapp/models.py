@@ -5,15 +5,29 @@ from django.urls import reverse
 from django.core.validators import MinLengthValidator, FileExtensionValidator
 from djstripe.models import Customer, Subscription
 
+from ckeditor.fields import RichTextField
+
 class User(AbstractUser):
     customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
     subscription = models.ForeignKey(Subscription, null=True, blank=True,on_delete=models.SET_NULL)
 
+class Company(models.Model):  
+    user = models.OneToOneField('User', on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=500)
+    description = models.TextField(default='')
+    logo = models.ImageField(blank=True, null=True)
+
 
 class Keyword(models.Model):
-    name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])
+    name = models.CharField(max_length=300, unique=True) #, validators=[MinLengthValidator(2)])
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(check=~models.Q(name=""), name="non_empty_name")
+        ]
 
 class Tag(models.Model):
     name = models.CharField(max_length=300) #, validators=[MinLengthValidator(2)])
@@ -57,7 +71,7 @@ class Job(models.Model):
         ('hired', "Hired")
     )
     title = models.CharField(max_length=300)
-    description = models.CharField(max_length=300)
+    description = RichTextField(blank=True)
     department = models.CharField(max_length=300, blank=True)
     category = models.CharField(max_length=300, blank=True)
     salary_low = models.IntegerField(default=0) # IntegerRangeField(blank=True, null=True)
