@@ -6,6 +6,13 @@
   <div class="col-9">
     
     <form method="post" enctype="multipart/form-data">{% csrf_token %}
+      <p><strong>Company Cover Photo</strong></p>
+      {% if user.company.cover %}<img class="img-thumbnail" src="{{user.company.cover.url}}" style="height: 200px" alt="@{{ user.email}}">{% endif %}
+      <p>{% if user.company.cover %}{{user.company.cover}}{%else%}No cover photo{% endif %}</p>
+      <label class="btn btn-info" for="my-cover-selector">
+        <input id="my-cover-selector" type="file" name='cover' style="display:none;">
+        Browse new cover
+      </label><hr>
       <div class="row">
         <div class="col-md-8">
           <div class="form-group row">
@@ -26,7 +33,7 @@
           <div class="form-group row">
             <label for="description" class="col-4 col-form-label">Description</label> 
             <div class="col-8">
-              <textarea name="description" placeholder="Description" class="form-control">{{user.company.description}}</textarea>
+              <textarea name="description" rows="5" placeholder="Description" class="form-control">{{user.company.description}}</textarea>
             </div>
           </div>
         </div>
@@ -34,13 +41,16 @@
           <label><strong>Company Logo</strong></label>
           <img class="img-thumbnail" src="{% if user.company.logo %}{{user.company.logo.url}}{%else%}data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=={% endif %}"  width="150" height="200" alt="@{{ user.email}}">
           <p>{% if user.company.logo %}{{user.company.logo}}{%else%}No Logo{% endif %}</p>
-          <label class="btn btn-info btn-block" for="my-file-selector">
-            <input id="my-file-selector" type="file" name='logo' style="display:none;">
+          <label class="btn btn-info btn-block" for="my-logo-selector">
+            <input id="my-logo-selector" type="file" name='logo' style="display:none;">
             Browse new logo
           </label>
         </div>
       </div>    
       <hr>
+
+      
+      
       
       <button name="submit" type="submit" class="btn btn-success btn-lg pull-right"><i class='fa fa-save'> Update Company</i></button>
     </form>

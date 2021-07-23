@@ -17,6 +17,7 @@ class Company(models.Model):
     name = models.CharField(max_length=500)
     description = models.TextField(default='')
     logo = models.ImageField(blank=True, null=True)
+    cover = models.ImageField(blank=True, null=True)
 
 
 class Keyword(models.Model):

@@ -11,10 +11,12 @@ get_company = lambda r: r.split('.')[0]
 
 
 def companyview(request):
-    company = get_company(request.get_host())
-    if not Company.objects.filter(slug=company):
-        raise Http404("Company Doesn't Exist")
-    return render(request,'company/company.html',{'company': company})
+    company_slug = get_company(request.get_host())
+    company = Company.objects.filter(slug=company_slug).first()
+    if company:
+        return render(request,'company/company.html',{'company': company})
+    raise Http404("Company Doesn't Exist")
+    
 
 def jobdetails(request,pk):
     company = get_company(request.get_host())
@@ -22,7 +24,7 @@ def jobdetails(request,pk):
     if not job:
         # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
         raise Http404("Job Doesn't Exist")
-    return render(request,'company/job.html',{'company': company, 'job': job})
+    return render(request,'company/job.html',{'company': job.created_by.company, 'job': job})
 
 def applyjob(request,pk):
     company = get_company(request.get_host())
@@ -45,7 +47,7 @@ def applyjob(request,pk):
         cand = Candidate(job = job)
         form = CandidateForm(instance=cand)
 
-    return render(request,'company/apply_job.html',{'company': company, 
+    return render(request,'company/apply_job.html',{'company': job.created_by.company, 
         'form':form,'job': job})
 
 
