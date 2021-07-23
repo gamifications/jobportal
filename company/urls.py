@@ -14,5 +14,5 @@ urlpatterns = [
 
     # redirect urls such http://microsoft.localhost:8000/account/login/?next=/payment/ 
     # to http://microsoft.localhost:8000/
-    url(r'^.*', RedirectView.as_view(pattern_name='company', permanent=False)),
+    # url(r'^.*', RedirectView.as_view(pattern_name='company', permanent=False)),
 ]
