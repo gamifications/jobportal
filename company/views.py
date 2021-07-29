@@ -41,7 +41,7 @@ def applyjob(request,pk):
             candidate.job = job
             candidate.save()
             messages.success(request, 'Job submitted successfully!')
-            return redirect(f'/job/{job.pk}/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
+            return redirect(f'/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
             
     else:
         cand = Candidate(job = job)
@@ -62,7 +62,7 @@ class JobsAjaxDatatableView(AjaxDatatableView):
         {'name': 'title', 'visible': True },
         {'name': 'department', 'visible': True, },
         {'name': 'category', 'visible': True},  
-        {'name': 'apply', 'title': 'Apply Now', 'searchable': False, 'orderable': False, },
+        {'name': 'apply', 'title': '', 'searchable': False, 'orderable': False, },
         {'name': 'description', 'visible': False, },
         # {'name': 'app_label', 'foreign_field': 'content_type__app_label', 'visible': True, },
     ]
@@ -73,11 +73,12 @@ class JobsAjaxDatatableView(AjaxDatatableView):
             company = get_company(request.REQUEST.get('company'))
             queryset = queryset.filter(created_by__company__slug=company)
         
-        return queryset
+            return queryset
 
 
     def customize_row(self, row, obj):
         # https://github.com/morlandi/django-ajax-datatable#id42
         row['apply'] = f"""
-        <a class='btn btn-success btn-sm' href='/job/{obj.id}/'>Apply Job</a>
+        <a class='btn btn-warning btn-sm' href='/job/{obj.id}/'>View Job</a>
+        <a class='btn btn-success btn-sm' href='/apply/{obj.id}/'>Apply Job</a>
         """
