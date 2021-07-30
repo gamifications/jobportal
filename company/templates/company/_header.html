@@ -1,10 +1,7 @@
+{% load myapp_tags %} {# custom template tag from myapp/templatetags #}
 
-<img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="img-fluid" alt="">
-<!-- <div class="jumbotron">
-  <h1 class="display-4">{{company.name|title}}!</h1>
-  <p class="lead">LIVE ENERGIZED.</p>
-  <hr class="my-4">
-  <p>{% if company.description%}{{company.description}}{% else%}Join {{company}} the most energizing community for Python Developers and get long-term remote jobs with leading brands.{% endif %}</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">JOIN {{company.name|upper}}</a>
-</div>
- -->
+
+<!-- <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="img-fluid" alt=""> 
+https://stackoverflow.com/a/39015688/2351696
+-->
+<img src="{% if company.cover %}{{ request.scheme }}://{% get_setting "PARENT_HOST" %}{{company.cover.url }}{%else%}https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg{%endif%}" class="img-fluid" alt="" style="width:100%">
