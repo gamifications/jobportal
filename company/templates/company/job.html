@@ -1,17 +1,7 @@
-{% extends 'base.html' %}
-{% load hosts %}
-{% load crispy_forms_tags crispy_forms_filters %}
-
+{% extends 'company/base.html' %}
 {% block body %}
 {% include 'company/_header.html' %}
 <div class="card mb-3">
-<div class="card-header">
-  <ul class="nav nav-tabs card-header-tabs">
-    <li class="nav-item">
-      <a class="nav-link" href="{% host_url 'company' host 'wildcard' company %}"><i class="fa fa-home"></i> All Jobs</a>
-    </li>
-  </ul>
-</div>
 <div class="card-body">
   
 

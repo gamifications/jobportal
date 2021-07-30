@@ -7,31 +7,32 @@ from django_hosts.resolvers import reverse
 from myapp.models import Job, JobKeywords, Candidate, Company
 from myapp.forms import CandidateForm
 
-get_company = lambda r: r.split('.')[0]
 
-
-def companyview(request):
-    company_slug = get_company(request.get_host())
+def get_company_or_404(host):
+    company_slug = host.split('.')[0]
     company = Company.objects.filter(slug=company_slug).first()
     if company:
-        return render(request,'company/company.html',{'company': company})
+        return company
     raise Http404("Company Doesn't Exist")
+
+def jobs(request):
+    company = get_company_or_404(request.get_host())
+    jobs = Job.objects.filter(created_by__company=company)
+    return render(request,'company/jobs.html',{'jobs': jobs, 'company':company})
+
+def companyview(request):
+    company = get_company_or_404(request.get_host())
+    return render(request,'company/company.html',{'company': company})
     
 
 def jobdetails(request,pk):
-    company = get_company(request.get_host())
-    job = Job.objects.filter(created_by__company__slug=company, id=pk).first()
-    if not job:
-        # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
-        raise Http404("Job Doesn't Exist")
+    company = get_company_or_404(request.get_host())
+    job = Job.objects.filter(created_by__company=company, id=pk).first()
     return render(request,'company/job.html',{'company': job.created_by.company, 'job': job})
 
 def applyjob(request,pk):
-    company = get_company(request.get_host())
-    job = Job.objects.filter(created_by__company__slug=company, id=pk).first()
-    if not job:
-        # if somebody access subdomain that is not a company, eg: http://some.suhail.pw
-        raise Http404("Job Doesn't Exist")
+    company = get_company_or_404(request.get_host())
+    job = Job.objects.filter(created_by__company=company, id=pk).first()
 
     if request.method == 'POST':
 
@@ -70,7 +71,7 @@ class JobsAjaxDatatableView(AjaxDatatableView):
     def get_initial_queryset(self, request=None):
         queryset = self.model.objects.all()
         if 'company' in request.REQUEST:
-            company = get_company(request.REQUEST.get('company'))
+            company = request.REQUEST['company'].split('.')[0]
             queryset = queryset.filter(created_by__company__slug=company)
         
             return queryset

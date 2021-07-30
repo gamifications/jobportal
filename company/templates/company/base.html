@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load hosts %}
+
+{% block nav %}
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm" style="border-top: 4px solid orange;">
+  <img class='p-2' src="https://getbootstrap.com/docs/4.6/assets/brand/bootstrap-solid.svg" style="height:60px">
+  <h5 class="my-0 mr-md-auto font-weight-normal">{{company.name}}</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" href="{% host_url 'jobs' host 'wildcard' company.slug %}">Home</a>
+    <a class="p-2 text-dark" href="{% host_url 'jobs' host 'wildcard' company.slug %}">Search for jobs</a>
+    <a class="p-2 text-dark" href="{% host_url 'company' host 'wildcard' company.slug %}">About us</a>
+  </nav>
+</div>
+{% endblock %}

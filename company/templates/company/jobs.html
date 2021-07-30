@@ -1,0 +1,29 @@
+{% extends 'company/base.html' %}
+{% load humanize %}
+
+{% block body %}
+{% include 'company/_header.html' %}
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3">
+          <p class="lead">Filters:</p>
+          <p>Salary</p>
+          <ul>
+            <li><a href="">less than 10000</a></li>
+            <li><a href="">greater than 10000</a></li>
+          </ul>
+      </div>
+      <div class="col-md-9" style="border-left: 1px solid #ccc;">
+        {% for job in jobs %}
+        <div class="m-2">
+          <p class="lead"><a href="/job/{{job.id}}/">{{job.title}}</a></p>
+          <small class="text-muted">salary: {{job.salary_low}}£ to {{job.salary_high}}£ | {{job.reporting_line}} | posted on: {{job.created_at|naturaltime}}</small>
+        </div>
+        <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
