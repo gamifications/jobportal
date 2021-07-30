@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from ajax_datatable.views import AjaxDatatableView
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django_hosts.resolvers import reverse
 
@@ -15,9 +15,16 @@ def get_company_or_404(host):
         return company
     raise Http404("Company Doesn't Exist")
 
+def get_job_or_404(host,pk):
+    company = get_company_or_404(host)
+    job = Job.objects.filter(created_by__company=company, id=pk).exclude(stage='hired').first()
+    if job:
+        return job
+    raise Http404("Job Doesn't Exist")
+
 def jobs(request):
     company = get_company_or_404(request.get_host())
-    jobs = Job.objects.filter(created_by__company=company)
+    jobs = Job.objects.filter(created_by__company=company).exclude(stage='hired')
     return render(request,'company/jobs.html',{'jobs': jobs, 'company':company})
 
 def companyview(request):
@@ -26,13 +33,12 @@ def companyview(request):
     
 
 def jobdetails(request,pk):
-    company = get_company_or_404(request.get_host())
-    job = Job.objects.filter(created_by__company=company, id=pk).first()
+    job = get_job_or_404(request.get_host(),pk)
+
     return render(request,'company/job.html',{'company': job.created_by.company, 'job': job})
 
 def applyjob(request,pk):
-    company = get_company_or_404(request.get_host())
-    job = Job.objects.filter(created_by__company=company, id=pk).first()
+    job = get_job_or_404(request.get_host(),pk)
 
     if request.method == 'POST':
 
@@ -42,7 +48,7 @@ def applyjob(request,pk):
             candidate.job = job
             candidate.save()
             messages.success(request, 'Job submitted successfully!')
-            return redirect(f'/') # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER')) # redirect() # reverse('company:applyjob', args=(job.pk,), host='wildcard'))
             
     else:
         cand = Candidate(job = job)
@@ -52,7 +58,8 @@ def applyjob(request,pk):
         'form':form,'job': job})
 
 
-
+# Need to delete this, since datatable is used in company page
+# and it needs to modify.
 class JobsAjaxDatatableView(AjaxDatatableView):
     model = Job
     initial_order = [["title", "asc"], ]
