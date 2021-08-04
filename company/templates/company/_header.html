@@ -4,4 +4,4 @@
 <!-- <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg" class="img-fluid" alt=""> 
 https://stackoverflow.com/a/39015688/2351696
 -->
-<img src="{% if company.cover %}{{ request.scheme }}://{% get_setting "PARENT_HOST" %}{{company.cover.url }}{%else%}https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg{%endif%}" class="img-fluid" alt="" style="width:100%">
+<img src="{% if company.cover %}{{company.cover.url }}{%else%}https://mdbootstrap.com/img/Photos/Slides/img%20(70).jpg{%endif%}" class="img-fluid" alt="" style="width:100%">

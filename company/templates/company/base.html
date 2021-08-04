@@ -4,7 +4,7 @@
 
 {% block nav %}
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm" style="border-top: 4px solid orange;">
-  <img class='p-2' src="{% if company.logo %}{{ request.scheme }}://{% get_setting "PARENT_HOST" %}{{company.logo.url }}{%else%}https://getbootstrap.com/docs/4.6/assets/brand/bootstrap-solid.svg{%endif%}" style="height:60px">
+  <img class='p-2' src="{% if company.logo %}{{company.logo.url }}{%else%}https://getbootstrap.com/docs/4.6/assets/brand/bootstrap-solid.svg{%endif%}" style="height:60px">
   <h5 class="my-0 mr-md-auto font-weight-normal">{{company.name}}</h5>
   <nav class="my-2 my-md-0 mr-md-3">
     <a class="p-2 text-dark" href="{% host_url 'jobs' host 'wildcard' company.slug %}">Home</a>
